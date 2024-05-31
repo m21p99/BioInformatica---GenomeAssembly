@@ -54,11 +54,10 @@ class GA:
 
         print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
 
-        # c = np.argmax(pop_fitness)
+        c = np.argmax(pop_fitness)
         # print(c)
-        best_ind = copy.deepcopy(pop_fitness)
-        # best_ind = copy.deepcopy(pop_fitness)
-        print(best_ind)
+        best_ind = copy.deepcopy(population[c])
+        # print(best_ind)
 
         print("Migliorr individuo della popolazione corrente: \n", best_ind)
         print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
@@ -129,26 +128,41 @@ class GA:
             print("----------------------")
 
             # population.append(best_ind)
-            """
-            for x in population:
-                print(x)
-            """
 
-            population.append(copy.deepcopy(pop_fitness))
-            print("Popolazione dopo l'aggiunta di", pop_fitness)
+            population.append(copy.deepcopy(best_ind))
+            print("Popolazione dopo l'aggiunta di", best_ind)
 
             print(population)
-            popolazione_invertita = []
-
-            for popolazione in population:
-                popolazione_invertita.append([(valore, chiave) for chiave, valore in popolazione])
 
             pop_fitness = self._evaluatePopulation(population, gen)
+            print(pop_fitness)
+            value = pop_fitness.max()
+            print("------------------")
+            print("L'obiettivo è quello di mantenere nelle generazioni successive il miglior individuo: ")
+            print("Stampa il valore massimo di fitness della generazione attuale: ", value)
+            print("Mentre il valore massimo di fitness fino ad ora e di ", best_fit)
 
-            #print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
+            """
+            Questo blocco di codice implementa una strategia di elitismo nell'algoritmo genetico. L'obiettivo è
+            mantenere l'individuo migliore (con la fitness massima) tra le generazioni successive, garantendo che il 
+            miglior individuo individuato finora venga preservato nella popolazione.
+            Verifica se la fitness massima nella generazione corrente (fitness_evolution[generation]) è inferiore
+            alla fitness del miglior individuo trovato finora (best_fit)
+            """
+            if value < best_fit:
+                best_ind = copy.deepcopy(population[np.argmax(pop_fitness)])
+                population[0] = copy.deepcopy(best_ind)
+                print("Popolazione 0: ", population[0])
+                best_fit = value
+            else:
+                best_ind = population[pop_fitness.argmax()].copy()
+                best_fit = pop_fitness.max()
+                indexValue = np.argmax(pop_fitness)
+                population[0] = copy.deepcopy(population[indexValue])
 
-        return pop_fitness
+        print("Miglior individuo durante l'evalution:", best_ind)
 
+        return best_ind
 
     def _getOverlapValue(self, i, j, matrix, s1, s2, match, mismatch, gap):
         score = match if s1[i - 1] == s2[j - 1] else mismatch
@@ -451,8 +465,8 @@ class GA:
             print("Popolazione ", population[x])
             scores[x] = self._fitness(population[x])
             genomePopolation = assemble_genome_with_overlaps(population[x])
-            #print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
-            #print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
+            # print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
+            # print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
             print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
             current_distance = levenshtein(gen, genomePopolation)
             # Controlla se la distanza corrente è minore della distanza minima
@@ -490,12 +504,12 @@ class GA:
         # Mostra il grafico
         # plt.show()
 
-        print("Popy", popy)
-        popypopy = assemble_genome_with_overlaps(popy)
+        #print("Popy", popy)
+        #popypopy = assemble_genome_with_overlaps(popy)
 
-        #print("Distanza tra popypopy", levenshtein(popypopy, gen), "\nGenoma Popy:", popypopy)
+        # print("Distanza tra popypopy", levenshtein(popypopy, gen), "\nGenoma Popy:", popypopy)
 
-        return popy
+        return scores
 
 
 """
@@ -947,7 +961,7 @@ def createDataset(dataset):
     return sottosequenze
     """
     # Definiamo i 4 caratteri
-    caratteri = ['A','C','T','G']
+    caratteri = ['A', 'C', 'T', 'G']
 
     # Creiamo un dataset di 2000 caratteri scelti casualmente tra i 4
     dataset = ''.join(np.random.choice(caratteri) for _ in range(2000))
@@ -955,6 +969,7 @@ def createDataset(dataset):
     # Dividiamo il dataset in sottosequenze di 150 caratteri
     sottosequenze = [dataset[i:i + 150] for i in range(0, len(dataset), 150)]
     return sottosequenze
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 3:
