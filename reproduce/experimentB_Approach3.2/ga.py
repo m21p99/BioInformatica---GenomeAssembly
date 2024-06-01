@@ -68,7 +68,7 @@ class GA:
 
         # inizializza un array numpy (fitness_evolution) con zeri, la cui lunghezza è data dal numero di generazioni specificato da generations.
 
-        for generation in range(10):
+        for generation in range(7):
             print("---------")
             print('Esecuzione')
             # Tournament selection
@@ -465,9 +465,9 @@ class GA:
             print("Popolazione ", population[x])
             scores[x] = self._fitness(population[x])
             genomePopolation = assemble_genome_with_overlaps(population[x])
-            # print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
-            # print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
-            print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
+            #print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
+            #print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
+            #print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
             current_distance = levenshtein(gen, genomePopolation)
             # Controlla se la distanza corrente è minore della distanza minima
             if current_distance < min_distance:
@@ -584,6 +584,7 @@ def CFL(word, T):
 
 
 def count_repeats(reads):
+    print(reads)
     repeats_count = {}
     max_length = len(reads[0])
 
@@ -596,30 +597,39 @@ def count_repeats(reads):
     return repeats_count
 
 
-def apply_CFL_to_reads(reads, markers):
+def apply_CFL_to_reads(reads, markers1,markers2):
     CFL_array = []
     mappa = {}
 
     # Itera attraverso le letture
     for lettura in reads:
         # Trova l'indice dell'occorrenza del marcatore nella lettura
-        indice_marcatore = lettura.find(markers)
-        # print("Lettura", lettura)
-        # print("indice marcatore", indice_marcatore)
+        indice_marcatore = lettura.find(markers1)
+        #print("marcatore", markers1)
+        #print("lettura", lettura)
+        #print("indice marcatore", indice_marcatore)
         if indice_marcatore != -1:
-            # Applica l'algoritmo CFL alla parte prima del marcatore
-            CFL_prima = CFL(lettura[:indice_marcatore], markers)
-            # print("CFL_prima", CFL_prima)
-            # Applica l'algoritmo CFL alla parte dopo del marcatore
-            CFL_dopo = CFL(lettura[indice_marcatore:], markers)
-            # print("CFL_dopo", CFL_dopo)
-            # Aggiungi la CFL della parte prima e della parte dopo del marcatore all'array
-            CFL_prima.extend(CFL_dopo)
-            mappa[lettura] = CFL_prima
-            # print("LETTURA", lettura)
+            if indice_marcatore == 0:
+                CFL_prima = CFL(lettura[: len(markers1)], markers1)
+                #print("CFL_prima", CFL_prima)
+                CFL_dopo = CFL(lettura[len(markers1):], markers1)
+                #print("CFL_dopo", CFL_dopo)
+                CFL_prima.extend(CFL_dopo)
+                mappa[lettura] = CFL_prima
+            else:
+                # Applica l'algoritmo CFL alla parte prima del marcatore
+                CFL_prima = CFL(lettura[:indice_marcatore], markers1)
+                #print("CFL_prima", CFL_prima)
+                # Applica l'algoritmo CFL alla parte dopo del marcatore
+                CFL_dopo = CFL(lettura[indice_marcatore:], markers1)
+                #print("CFL_dopo", CFL_dopo)
+                # Aggiungi la CFL della parte prima e della parte dopo del marcatore all'array
+                CFL_prima.extend(CFL_dopo)
+                mappa[lettura] = CFL_prima
+                # print("LETTURA", lettura)
         else:
-            CFL_not = CFL(lettura[:], markers)
-            # print("CFL not", CFL_not)
+            CFL_not = CFL(lettura[:], markers1)
+            #print("CFL not", CFL_not)
             mappa[lettura] = [CFL_not]
         # print("CFL array:", CFL_array)
     # Stampa le CFL
@@ -666,12 +676,13 @@ def compute_fingerprint_by_list_factors(list_fact, reads):
 
 
 def find_max_read_per_sequence(repeats_count):
+    # Inizializziamo un nuovo dizionario per memorizzare le sequenze e i loro conteggi
     max_reads = {}
 
+    # Iteriamo attraverso il dizionario dato
     for sequence, count in repeats_count.items():
-        k = len(sequence)
-        if k not in max_reads or count > max_reads[k]['count']:
-            max_reads[k] = {'sequence': sequence, 'count': count}
+        # Aggiungiamo la sequenza come chiave e il suo conteggio come valore
+        max_reads[sequence] = count
 
     return max_reads
 
@@ -684,54 +695,45 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     _cromosomeInt = []
     print("------------")
+    print(reads)
+    sottosequenza_lunghezza = 100
 
-    print(len(count_repeats(reads)))
+    # Caso in cui abbiamo un dataset diviso in piu letture
+    readsGenoma = ''.join(reads)
+    reads = ''.join(reads)
+    print(readsGenoma)
+
+    reads = createDataset(reads,sottosequenza_lunghezza)
+
+    #print(len(count_repeats(reads)))
 
     # for x in reads:
     # print("Lettura: ", x)
 
     dict = count_repeats(reads)
-
+    #print(dict)
     # print(count_repeats(reads))
 
     print("------------")
     marker = []
     print("Le letture sono:", reads)
+
+
     max_reads = find_max_read_per_sequence(dict)
-    print("Max k per ogni marcatore:")
-    for k, info in max_reads.items():
-        print(f"Sequenza: {info['sequence']}", f"Valore: {info['count']}")
-        marker.append(info['sequence'])
+    sequenze_frequenti = sorted(max_reads.items(), key=lambda x: x[1], reverse=True)[:2]
 
-    # Filtra il dizionario per i marcatori di dimensione 4
-    max_4_marker = max((v for k, v in max_reads.items() if k == 3), key=lambda x: x['count'])
-
-    markerValue = max(dict, key=lambda k: dict[k])
-
-    # Combinazione dei marcatori
-
-    two_largest_values = heapq.nlargest(2, dict.values())
-    print("Combined", two_largest_values)
-    keys = [k for k, v in dict.items() if v in two_largest_values]
-    print(keys)
-    longest_string = max(keys, key=len)
-
-    # Concatena le chiavi
-    concatenatedMarker = longest_string + '' + keys[0]
-
-    print("quiiiiiiiiiiiiiiiiiiiiiiii")
-    print("------------ Marcatori di max k caratteri", max_4_marker['sequence'], max_4_marker['count'])
-    print("Marcatore più lungo", markerValue)
-    print("Combinazione di due marcatori", concatenatedMarker, keys[0])
+    markers = chiavi = [sequenza for sequenza, valore in sequenze_frequenti]
+    firstMark, secondMark = markers[0],markers[1]
+    print("Combinazione di due marcatori", firstMark,secondMark)
 
     print("------------")
 
-    results = apply_CFL_to_reads(reads, markerValue)
+    results = apply_CFL_to_reads(reads,firstMark,secondMark)
     print("Risultato ottenuto:", results)
 
     _intA = compute_fingerprint_by_list_factors(results, reads)
     print("------------")
-    print("FingerPrint del Marcatore ", markerValue, " è ", _intA)
+    print("FingerPrint del Marcatore ", firstMark, secondMark, " è ", _intA)
 
     # Modificato da me, prima era 60
     num_ind = 16
@@ -774,9 +776,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     """
     # print("Meomory:", memory)
 
-    gen = "".join(reads)
-
-    ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, gen)][0])
+    ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, reads)][0])
     print("--------------------")
     print("Siamo nel metodo Q-learning: ")
     # print("inizializza aux come una lista di indici che corrispondono alle posizioni delle letture nella lista reads: ", indices)
@@ -784,16 +784,17 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     # print("Memory, rappresenta la popolazione iniziale: ", slice)
     print("--------------------")
     print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico: ", ind_evolved)
-    print(assemble_genome_with_overlaps(ind_evolved))
     genomePopolation = assemble_genome_with_overlaps(ind_evolved)
+    print("Due genomi da confrontare:\n","Genoma di partenza:", readsGenoma, "\nGenomae ottenuto dal GA:", genomePopolation)
+    print("Distanza di Levenshtein: ", levenshtein(readsGenoma, genomePopolation))
     """
     for i in range(len(ind_evolved)):
         print("indice: ", i, "lettura: ", reads[i])
     """
     print("--------------------")
-    print("genoma", genome)
+    #print("genoma", genome)
     test = test_ga(root, factor, genome, ind_evolved, reads)
-    print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
+
     print("ind_evolved:", ind_evolved, "test_rw:", "%.5f" % test[1], "test:", test[0], "dist:", test[2])
 
 
@@ -945,29 +946,41 @@ def test_ga(root_node, factor, genome, ind_evolved, reads):
     return actions, total_reward, dist
 
 
-def createDataset(dataset):
-    """
-    # First Solution.
-    output = ""
+def createDataset(dataset, lunghezza_sottosequenza):
 
-    while len(output) < 2000:
-        lettura = np.random.choice(dataset)
-        output += lettura
-
-    sottosequenze = []
-    for i in range(0, len(output), 150):
-        sottosequenza = output[i:i + 150]
-        sottosequenze.append(sottosequenza)
-    return sottosequenze
-    """
     # Definiamo i 4 caratteri
-    caratteri = ['A', 'C', 'T', 'G']
+    #caratteri = ['A', 'C', 'G','T']
 
     # Creiamo un dataset di 2000 caratteri scelti casualmente tra i 4
-    dataset = ''.join(np.random.choice(caratteri) for _ in range(2000))
+    #dataset = ''.join(np.random.choice(caratteri) for _ in range(2000))
 
-    # Dividiamo il dataset in sottosequenze di 150 caratteri
-    sottosequenze = [dataset[i:i + 150] for i in range(0, len(dataset), 150)]
+    #print(dataset)
+    # Dividiamo il dataset in sottosequenze di 100 caratteri
+    #sottosequenze = [dataset[i:i + 100] for i in range(0, len(dataset), 100)]
+    #return sottosequenze
+
+    # Calcola il numero massimo di pezzi sovrapposti
+    sottosequenze = []
+    indice_inizio = 0
+
+    while indice_inizio < len(dataset) - lunghezza_sottosequenza + 1:
+        # Genera la sottosequenza corrente
+        sottosequenza = dataset[indice_inizio:indice_inizio + lunghezza_sottosequenza]
+        #print("sottosequenza estratta", sottosequenza)
+        sottosequenze.append(sottosequenza)
+        #print("sottosequenza estratta", sottosequenze)
+        # Seleziona un indice casuale per l'overlap
+        indice_casuale = random.randint(1, lunghezza_sottosequenza - 1)
+        #print("INDICE CASUALE", indice_casuale)
+        # Aggiorna l'indice di inizio per la prossima sottosequenza
+        indice_inizio += indice_casuale
+
+        # Verifica se la fine della sequenza è stata raggiunta
+        if indice_inizio + lunghezza_sottosequenza > len(dataset):
+            # Aggiungi l'ultima sottosequenza che include la fine della sequenza
+            sottosequenze.append(dataset[-lunghezza_sottosequenza:])
+            break
+
     return sottosequenze
 
 
@@ -1057,7 +1070,10 @@ if __name__ == "__main__":
                       'CAACATAACAGGCTA', 'CAACATAACAGGCTA', 'TTTTAACAGCAACAT', 'AACATAACAGGCTAA', 'CATTTTAACAGCAAC',
                       'TAACCATTTTAACAG', 'AACATAACAGGCTAA', 'CTAAGAGGGGCCGGA', 'AGGCTAAGAGGGGCC', 'CTAAGAGGGGCCGGA']
 
-    readProva = createDataset(reads_50_30_15)
+    readProva = 'TCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCGCGATGCAGTGTCCCTGAATAATCCAAACAACCTCGCCGCGGTCGCATGCGCCGCACGAAAGCCGGAAACTATTCACCTCTGTTTACTGAATGCTATGCGGAGCAGGAACCAGCAATCCTCGATTGTCTCCAGCGTAAAGAAGTGTCGCGCTCTTCCTTGATCACTAACGCGCAGCGGTAGCAAGATCTGCTTTCTACGGTTACGCGAACCAAACAGACTTGGGCGGCCACCTGCAGGTCAAGTACTAATATATAAGCACGGGAATACCACATCATGACGTGAACGATCGCAGCCTTAAAGACAGAATGTATATGCCTAGGCCCGCATATGCCCAACGACTTACAATCGGTGTATCCCTCTAGGTTGAGATCAACAGGAGTAGTCACCTTGAACCTGATATTGGAAGAGCGTGGTGCTGCACACCAAGGTGATCGGAGGTACGTGCAGGGTTACTAGCGATGCAGCAGGCAATGATTTGTTACTTATATCATTGTACGCAACAAGGTTGTGGGGAGGTTGCGTAAATCGGCGGCGCCCCGCCTTCCTCTACCCGGACATCGATTTTTCCGACCTCCACGAGAACTACTCGAGAACCCGAGCCTGAGTAAACCGGTATACAACTCTAGGCAAGTGCGCTACCCCTTTTACGCGTGAACGGAGCCGCTTTTCCCCCATAGTGCGTAAAGCGGTATGTTTAAATTTACTGTGGCGTTATGCGTCGCAGGTGTATGACCGGCTCGTCAGCGGCCACAGGCATCACGTAATATTTAGCGCTGGTCTTTGTTTTCTGTGATCGAATGGAAGGAGTCATTTATGCCACGAGGATATGACGAATAGTCTATCGTCTGCTAGGCAAGGTAAAAAAGTCAAGAATGAGACGGTGTTTGGCGCTATACCCCACTACAGAAACATATTGCTGCCCCGCGGCTCATGTCGTGCTGGGGTCCCTGTATAACAGCTGACACGACAAGCCGAGGCATCTATGACATCGACTAAAACTCTGGGTCGCGTTATGGTGGACCAGGCACGTACGGGGCGTAGCGCCTATTAAATTAGTCCAAAAGACATTTTTTGGTGACAGTGCTGCCCGACGACGTCCCTAGAATAACCAAAATAGGTCACAAAATATTGTCTTGTTCATGATAATCGATCTTTTTTTGGCAAAGCATCAGAAGTCTACCAGTCAGTTCTTAGCCCAGTGAGAGGGTGATTGGGCGCCAGATCGTAGTCAAATTACGGAGACGATTCTTTGCGTAAAATTGCTCCCGTGAGGGCGAGAATCGGAACAGCGACGATTTATTGCGGCGCGACTCGGGAGATTGACAGGAATACCGAATGGCTAGCTTGTAAATTTAAATAGGAATCCATTGTTCCTAAAGCAGATTAGCGCCGATCCGAGCGTAAACCGGCCGCTGAACGCACGGCGTCATCTGGTTGAACTACTATTGGTAGTAGGAATCACATATGGGTGGTTACTTGTTAGCTTTGTACGCATTGGTTATTCCGCAAAAGGTACAGACTGAACCACTATGTAGCATCCATGTTCTCGATGGCACAAGTTCTCACATGTACGTCATCACGGCACCTGACGCCTAGTTGACCAAAATCTCCGTTGCGGCGACAAACGGCTTCCCTATGAAACGGCATGCAGTCATTTCGGCACACGAGATATTGGGGACAGTGCCTAACTCTCGGTGCCCCTTTTAAAGCAAAATGATGCTTGGTGGCTGGTTACAAAGCCCAGCAGGCATCTCGGATAGTTGTCGCATTTTCTGTCGACAATCGTGACTAGTTGATCTGCACACATAGATGGGCTTACTCCATGCGGCATTTACGCTATCGTATCGGTCATTTACACTACTGCAGGACAGCGAGCGGGGCGTCCATCGAACATGAAGTTCAGGACGGCAACGTGTGGTTAATGTCCTGCGAAGCTTTAACTTAAAGGCGAT'
+    #readProva = 'TCACTTABCD'
+
+
 
     reads_381_20_75 = ['AAAGAAGCCGCAGCAAAAGCGTTTGGCACCGGGATCCGCAATGGTCTGGCGTTTAATCAATTTGAAGTATTCAAT',
                        'GGCGTTGCAAATATGCATGTAACGCTGGCAGATGAGCGGCACTATGCTTGTGCCACGGTAATTATTGAAAGTTAA',
