@@ -50,25 +50,25 @@ class GA:
         # print("Le letture sono: ", reads)
         pop_fitness = self._evaluatePopulation(population, gen)
         print(pop_fitness)
-        print("--------------------------------")
+        #print("--------------------------------")
 
-        print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
+        #print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
 
         c = np.argmax(pop_fitness)
         # print(c)
         best_ind = copy.deepcopy(population[c])
         # print(best_ind)
 
-        print("Migliorr individuo della popolazione corrente: \n", best_ind)
-        print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
-        print("---------------------")
+        #print("Migliorr individuo della popolazione corrente: \n", best_ind)
+        #print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
+        #print("---------------------")
         # print("Le letture sono: ", reads)
         best_fit = self._fitness(best_ind)
-        print("Valore fitness dell'individuo migliore: ", best_fit)
+        #print("Valore fitness dell'individuo migliore: ", best_fit)
 
         # inizializza un array numpy (fitness_evolution) con zeri, la cui lunghezza è data dal numero di generazioni specificato da generations.
 
-        for generation in range(7):
+        for generation in range(100):
             print("---------")
             print('Esecuzione')
             # Tournament selection
@@ -88,10 +88,10 @@ class GA:
 
             # Crossover
             for i in range(0, pop_size, 2):
-                print("i:", i)
+                #print("i:", i)
                 if i + 1 < len(selected):
                     if np.random.rand() < self.crossover_prob:
-                        print("-----------------")
+                        #print("-----------------")
                         # print("Popo", selected[i])
                         # print("Popo1", selected[i + 1])
                         population[i], population[i + 1] = self._crossover(selected[i], selected[i + 1])
@@ -100,20 +100,20 @@ class GA:
                     else:
                         # Qui invece di eseguire l'operazione di crossover, copiamo semplicemente i genitori nella nuova generazione
                         population[i], population[i + 1] = selected[i].copy(), selected[i + 1].copy()
-                        print("Operazione di crossover non andata a buon fine: ", population[i], population[i + 1])
+                        #print("Operazione di crossover non andata a buon fine: ", population[i], population[i + 1])
             # Mutation
-            print("-----------------")
+            #print("-----------------")
             # print("Stampa dopo l'operazione di crossover")
             # for i, popolazione in enumerate(population):
             # print(f"Popolazione {i + 1}:", popolazione)
 
-            print("Siamo nel metodo mutation:")
+            #print("Siamo nel metodo mutation:")
             for i in range(len(population)):
                 if np.random.rand() > self.mutation_prob:
                     population[i] = self._mutation(population[i])
                     # print("Popolazione corrente nel mutation: ", "\n", population[i])
 
-            print("Stampa della popolazione dopo l'operazione di mutation:")
+            #print("Stampa della popolazione dopo l'operazione di mutation:")
 
             # Iterazione sulla lista di popolazioni
             # for i, popolazione in enumerate(population):
@@ -121,18 +121,18 @@ class GA:
 
             # for x in population:
             # print("Population", x)
-            print("----------------------")
+            #print("----------------------")
 
             print("Ridefiniamo i valori fitness della popolazione modificata: ")
             # print(array)
-            print("----------------------")
+            #print("----------------------")
 
             # population.append(best_ind)
 
             population.append(copy.deepcopy(best_ind))
-            print("Popolazione dopo l'aggiunta di", best_ind)
+            #print("Popolazione dopo l'aggiunta di", best_ind)
 
-            print(population)
+            #print(population)
 
             pop_fitness = self._evaluatePopulation(population, gen)
             print(pop_fitness)
@@ -152,7 +152,7 @@ class GA:
             if value < best_fit:
                 best_ind = copy.deepcopy(population[np.argmax(pop_fitness)])
                 population[0] = copy.deepcopy(best_ind)
-                print("Popolazione 0: ", population[0])
+                #print("Popolazione 0: ", population[0])
                 best_fit = value
             else:
                 best_ind = population[pop_fitness.argmax()].copy()
@@ -160,7 +160,7 @@ class GA:
                 indexValue = np.argmax(pop_fitness)
                 population[0] = copy.deepcopy(population[indexValue])
 
-        print("Miglior individuo durante l'evalution:", best_ind)
+        #print("Miglior individuo durante l'evalution:", best_ind)
 
         return best_ind
 
@@ -279,7 +279,7 @@ class GA:
                 Ad esempio, [2, 4] indica che sono stati selezionati casualmente gli indici 2 e 4 dall'array cromossome.
         """
 
-        print("----- Siamo nella funzione Crossover -----")
+        #print("----- Siamo nella funzione Crossover -----")
         # print("Stampiamo due vincitori del torneo _ring: ", "\n", cromossome1, "\n", cromossome2)
 
         genes = np.random.choice(len(cromossome1), size=2, replace=False)
@@ -298,19 +298,19 @@ class GA:
         N.B -> Questo processo di estrazione è una parte chiave dell'operatore di crossover. La porzione estratta da 
         ciascun cromosoma verrà quindi combinata per creare i cromosomi figli durante la fase di crossover"""
 
-        print("-----")
+        #print("-----")
 
         aux1 = cromossome1[genes[0]:genes[1] + 1]
         # print("Estrazione dal cromosoma 1", " con valori ", aux1)
         aux2 = cromossome2[genes[0]:genes[1] + 1]
         # print("Estrazione dal cromosoma 2", " con valori ", aux2)
-        print("-----")
+        #print("-----")
         """Queste differenze rappresentano le parti di cromosomi che non sono state incluse nelle porzioni estratte 
         durante l'operazione di crossover. -> np.in1d(cromossome2, aux1, assume_unique=True) restituisce un array di 
         bool che indica, quali elementi di cromosome2 sono presenti un aux1, con ~ davanti, andiamo a negare il 
         risultato dell'istruzione ottenendo gli elementi del cromosoma2 che non sono stati utilizzati per il 
         crossover"""
-        print("-----")
+        #print("-----")
 
         # diff2 = cromossome2[~np.in1d(cromossome2, aux1, assume_unique=True)]
         diff2 = [gene for gene in cromossome2 if gene not in aux1]
@@ -318,19 +318,19 @@ class GA:
         # diff1 = cromossome1[~np.in1d(cromossome1, aux2, assume_unique=True)]
         diff1 = [gene for gene in cromossome1 if gene not in aux2]
         # print("Parti del cromosoma non incluse durante l'operazione di crossover eseguito: ", diff1)
-        print("-----")
+        #print("-----")
 
         """
         Ci consente di formare i cromosomi figli: aggiungendo in coda agli elementi estratti per il crossover di aux1,
             la differenza tra gli elementi non presenti del cromosoma2.
         Stessa cosa fatta anche per child2
         """
-        print("-----")
+        #print("-----")
 
         aux1.extend(diff2)
         aux2.extend(diff1)
         # print("Stampa dei figli ottenuti combinando gli elementi estratti dal primo e secondo cromosoma, con l'aggiunta degli elementi che non sono stati presi durante il crossover ", "\n", aux1, "\n", aux2)
-        print("-----")
+        #print("-----")
         return aux1, aux2
 
     """
@@ -425,7 +425,7 @@ class GA:
 
     def _fitness(self, cromossome):
         score = 0
-        print("----- Siamo nel metodo _fitness -----")
+
 
         # Modifica
         # print("Popolazione", cromossome)
@@ -455,26 +455,28 @@ class GA:
     def _evaluatePopulation(self, population, gen):
         scores = np.zeros(len(population))
 
-        min_distance = float('inf')  # Inizializza la distanza minima come infinito
+        #min_distance = float('inf')  # Inizializza la distanza minima come infinito
         min_genome = None  # Inizializza il genoma con la distanza minima
         popy = []
         print("----- Siamo dentro il metodo _evaluatePopulation ")
+        print("----- Siamo nel metodo _fitness -----")
         # print("Stampa della popolazione: ", population)
         # fitness_map = {}
         for x in range(len(population)):
-            print("Popolazione ", population[x])
+            #print("Popolazione ", population[x])
             scores[x] = self._fitness(population[x])
-            genomePopolation = assemble_genome_with_overlaps(population[x])
+            #genomePopolation = assemble_genome_with_overlaps(population[x])
             #print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
             #print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
             #print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
-            current_distance = levenshtein(gen, genomePopolation)
+            #current_distance = levenshtein(gen, genomePopolation)
             # Controlla se la distanza corrente è minore della distanza minima
+            """
             if current_distance < min_distance:
                 min_distance = current_distance  # Aggiorna la distanza minima
                 min_genome = genomePopolation  # Aggiorna il genoma con la distanza minima
                 popy = population[x]
-
+            """
         indeMin = scores.argmin()
         population.pop(indeMin)
         scores = np.delete(scores, indeMin)
@@ -483,6 +485,8 @@ class GA:
         # popolazione = list(fitness_map.keys())
         # sfitness_values = list(fitness_map.values())
 
+
+        """
         # Crea un array con i numeri da 0 a len(fitness_values)-1
         population = np.arange(len(scores))
 
@@ -508,7 +512,7 @@ class GA:
         #popypopy = assemble_genome_with_overlaps(popy)
 
         # print("Distanza tra popypopy", levenshtein(popypopy, gen), "\nGenoma Popy:", popypopy)
-
+        """
         return scores
 
 
@@ -584,7 +588,7 @@ def CFL(word, T):
 
 
 def count_repeats(reads):
-    print(reads)
+    #print(reads)
     repeats_count = {}
     max_length = len(reads[0])
 
@@ -640,7 +644,7 @@ def apply_CFL_to_reads(reads, markers1,markers2):
 def compute_fingerprint_by_list_factors(list_fact, reads):
     # print(list_fact)
 
-    print("-------------------------")
+    #print("-------------------------")
 
     lunghezze_array = []
 
@@ -670,8 +674,8 @@ def compute_fingerprint_by_list_factors(list_fact, reads):
         while len(sublist) < max_len:
             sublist.append(0)
     """
-    print("---------")
-    print(new_map)
+    #print("---------")
+    #print(new_map)
     return new_map
 
 
@@ -695,13 +699,13 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     _cromosomeInt = []
     print("------------")
-    print(reads)
+    #print(reads)
     sottosequenza_lunghezza = 100
 
     # Caso in cui abbiamo un dataset diviso in piu letture
     readsGenoma = ''.join(reads)
     reads = ''.join(reads)
-    print(readsGenoma)
+    #print(readsGenoma)
 
     reads = createDataset(reads,sottosequenza_lunghezza)
 
@@ -716,7 +720,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     print("------------")
     marker = []
-    print("Le letture sono:", reads)
+    #print("Le letture sono:", reads)
 
 
     max_reads = find_max_read_per_sequence(dict)
@@ -733,7 +737,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     _intA = compute_fingerprint_by_list_factors(results, reads)
     print("------------")
-    print("FingerPrint del Marcatore ", firstMark, secondMark, " è ", _intA)
+    #print("FingerPrint del Marcatore ", firstMark, secondMark, " è ", _intA)
 
     # Modificato da me, prima era 60
     num_ind = 16
@@ -744,19 +748,19 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     # Creo una lista di indici
     indices = list(range(len(_intA)))
-    mescolamento = 20
+    mescolamento = 70
     # Creo una lista vuota per contenere gli array mescolati
     shuffled_arrays = []
 
     # Modificia
     listaValori = list(_intA.values())
     arrayString = []
-    print(listaValori)
+    #print(listaValori)
 
     # Mescolo gli indici e creo un nuovo array per 3 volte
     popolazioni = [(chiave, valore) for chiave, valore in _intA.items()]
     popolazioni_mescolate = []
-    print("Popolazioni", popolazioni)
+    #print("Popolazioni", popolazioni)
     for _ in range(mescolamento):
         # Crea una copia delle popolazioni per non modificare l'originale
         popolazioni_copia = popolazioni.copy()
