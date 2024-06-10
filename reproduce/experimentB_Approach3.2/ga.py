@@ -7,7 +7,7 @@ from itertools import permutations
 import random
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 
 ### GA ###
@@ -30,14 +30,9 @@ class GA:
 
     def run_ga(self, env, pop, gen):
         print("----- Siamo nel metodo run_GA -----")
-        # memory = remove_zeros(memory)
         # print("Stampa delle varie letture: ", reads)
         pop_size = len(pop)
-        # cromo_size = len(reads)
 
-        # print("Qui", self.findOverlapNew([2, 3, 5], [3, 5, 0]))
-
-        # population1 = np.array(memory)
         population = pop
         # print("Popolazione iniziale: ")
 
@@ -50,48 +45,38 @@ class GA:
         # print("Le letture sono: ", reads)
         pop_fitness = self._evaluatePopulation(population, gen)
         print(pop_fitness)
-        #print("--------------------------------")
+        # print("--------------------------------")
 
-        #print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
+        # print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
 
         c = np.argmax(pop_fitness)
         # print(c)
         best_ind = copy.deepcopy(population[c])
         # print(best_ind)
 
-        #print("Migliorr individuo della popolazione corrente: \n", best_ind)
-        #print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
-        #print("---------------------")
+        # print("Migliorr individuo della popolazione corrente: \n", best_ind)
+        # print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
+        # print("---------------------")
         # print("Le letture sono: ", reads)
         best_fit = self._fitness(best_ind)
-        #print("Valore fitness dell'individuo migliore: ", best_fit)
+        # print("Valore fitness dell'individuo migliore: ", best_fit)
 
-        # inizializza un array numpy (fitness_evolution) con zeri, la cui lunghezza è data dal numero di generazioni specificato da generations.
-
-        for generation in range(100):
+        mescolamento = 100
+        for generation in range(mescolamento):
             print("---------")
             print('Esecuzione')
             # Tournament selection
             selected = []
             # seleCpy = []
             for i in range(len(population)):
-                # winner = self._ring(pop_fitness, self.ring_size)
-                # print("Winner", population[winner])
                 selected.append(population[i].copy())
-                # seleCpy.append(population[i].copy())
-            # print("Selezionati i vincitori del torneo: ")
-
-            """
-            for x in selected:
-                print(x)
-            """
 
             # Crossover
             for i in range(0, pop_size, 2):
-                #print("i:", i)
+                # print("i:", i)
                 if i + 1 < len(selected):
                     if np.random.rand() < self.crossover_prob:
-                        #print("-----------------")
+                        # print("-----------------")
                         # print("Popo", selected[i])
                         # print("Popo1", selected[i + 1])
                         population[i], population[i + 1] = self._crossover(selected[i], selected[i + 1])
@@ -100,39 +85,26 @@ class GA:
                     else:
                         # Qui invece di eseguire l'operazione di crossover, copiamo semplicemente i genitori nella nuova generazione
                         population[i], population[i + 1] = selected[i].copy(), selected[i + 1].copy()
-                        #print("Operazione di crossover non andata a buon fine: ", population[i], population[i + 1])
+                        # print("Operazione di crossover non andata a buon fine: ", population[i], population[i + 1])
             # Mutation
-            #print("-----------------")
-            # print("Stampa dopo l'operazione di crossover")
-            # for i, popolazione in enumerate(population):
-            # print(f"Popolazione {i + 1}:", popolazione)
+            # print("-----------------")
 
-            #print("Siamo nel metodo mutation:")
+            # print("Siamo nel metodo mutation:")
             for i in range(len(population)):
                 if np.random.rand() > self.mutation_prob:
                     population[i] = self._mutation(population[i])
                     # print("Popolazione corrente nel mutation: ", "\n", population[i])
 
-            #print("Stampa della popolazione dopo l'operazione di mutation:")
+            # print("Stampa della popolazione dopo l'operazione di mutation:")
 
-            # Iterazione sulla lista di popolazioni
-            # for i, popolazione in enumerate(population):
-            # print(f"Popolazione {i + 1}:", popolazione)
-
-            # for x in population:
-            # print("Population", x)
-            #print("----------------------")
+            # print("----------------------")
 
             print("Ridefiniamo i valori fitness della popolazione modificata: ")
             # print(array)
-            #print("----------------------")
-
-            # population.append(best_ind)
+            # print("----------------------")
 
             population.append(copy.deepcopy(best_ind))
-            #print("Popolazione dopo l'aggiunta di", best_ind)
-
-            #print(population)
+            # print("Popolazione dopo l'aggiunta di", best_ind)
 
             pop_fitness = self._evaluatePopulation(population, gen)
             print(pop_fitness)
@@ -152,7 +124,7 @@ class GA:
             if value < best_fit:
                 best_ind = copy.deepcopy(population[np.argmax(pop_fitness)])
                 population[0] = copy.deepcopy(best_ind)
-                #print("Popolazione 0: ", population[0])
+                # print("Popolazione 0: ", population[0])
                 best_fit = value
             else:
                 best_ind = population[pop_fitness.argmax()].copy()
@@ -160,10 +132,12 @@ class GA:
                 indexValue = np.argmax(pop_fitness)
                 population[0] = copy.deepcopy(population[indexValue])
 
-        #print("Miglior individuo durante l'evalution:", best_ind)
+        # print("Miglior individuo durante l'evalution:", best_ind)
 
         return best_ind
 
+    # Funzioni non utilizzate
+    """
     def _getOverlapValue(self, i, j, matrix, s1, s2, match, mismatch, gap):
         score = match if s1[i - 1] == s2[j - 1] else mismatch
         aux = max(
@@ -175,12 +149,13 @@ class GA:
         return aux
 
     """
-    La funzione compute_overlap prende due stringhe left_read e right_read come input e cerca la sovrapposizione tra di esse. 
+
+    """
+    La funzione compute_overlap prende due stringhe left_read e right_read come input e cerca la sovrapposizione tra di esse.
     La sovrapposizione è la parte comune tra il suffisso di left_read e il prefisso di right_read.
     ritorno della funzione -> Se trova una corrispondenza completa, restituisce la sovrapposizione e la sua lunghezza.
-    """
 
-    def compute_overlap(self, left_read, right_read):
+    def compute_overlap(left_read, right_read):
         for i in range(len(left_read)):
             l = left_read[i:]
             size = len(l)
@@ -190,10 +165,11 @@ class GA:
         return "", 0
 
     """
-    La funzione _getOverlap calcola la sovrapposizione massima tra due stringhe s1 e s2 utilizzando una matrice di programmazione dinamica. 
-    La sovrapposizione è calcolata sommando i punteggi delle sovrapposizioni tra i prefissi delle due stringhe. 
-    La funzione restituisce il valore massimo della sovrapposizione ottenuta.
+
     """
+    La funzione _getOverlap calcola la sovrapposizione massima tra due stringhe s1 e s2 utilizzando una matrice di programmazione dinamica.
+    La sovrapposizione è calcolata sommando i punteggi delle sovrapposizioni tra i prefissi delle due stringhe.
+    La funzione restituisce il valore massimo della sovrapposizione ottenuta.
 
     def _getOverlap(self, s1, s2, match, mismatch, gap):
         l = len(s1) + 1
@@ -204,16 +180,15 @@ class GA:
                 matrix[i][j] = self._getOverlapValue(i, j, matrix, s1, s2, match, mismatch, gap)
         return np.max(matrix)
 
-    """
-    Questa funzione aiuta a ottenere la lunghezza della sovrapposizione tra il suffisso di una stringa e il prefisso di un'altra.
-    """
 
     def _getSuffixPrefixOverlap(self, left, right):
         return self.compute_overlap(left, right)[1]
+    """
 
-    """La funzione _findOverlap calcola la lunghezza della sovrapposizione tra due sequenze, identificate dagli 
+    """
+    La funzione _findOverlap calcola la lunghezza della sovrapposizione tra due sequenze, identificate dagli 
     indici id1 e id2, presenti nella lista reads. La sovrapposizione rappresenta la quantità di caratteri comuni tra 
-    una parte finale della sequenza reads[id1] e una parte iniziale della sequenza reads[id2]."""
+    una parte finale della sequenza reads[id1] e una parte iniziale della sequenza reads[id2].
 
     def _findOverlap2(self, reads, id1, id2, match=1.0, mismatch=-0.33, gap=-1.33):
         if id1 < id2:
@@ -230,10 +205,12 @@ class GA:
                 self.buffer[minId] = {}
             self.buffer[minId][maxId] = overlap
         return overlap
+    """
 
-    """La funzione _crossover implementa l'operatore di crossover per l'algoritmo genetico. In particolare, 
+    """
+    La funzione _crossover implementa l'operatore di crossover per l'algoritmo genetico. In particolare,
     prende in input due cromosomi (cromossome1 e cromossome2) e restituisce due nuovi cromosomi (figli) ottenuti 
-    combinando porzioni dei cromosomi genitori."""
+    combinando porzioni dei cromosomi genitori.
 
     def crossover(self, population1, population2):
         # Seleziona casualmente due cromosomi da ciascuna popolazione
@@ -252,85 +229,32 @@ class GA:
             population2[selected_chromosome_pop2[i]][:crossover_point_pop2] = temp
 
         return population1, population2
+    """
 
     def _crossover(self, cromossome1, cromossome2):
 
-        """
-        if type(cromossome1) == list:
-            cromossome1 = np.array(cromossome1)
-        if type(cromossome2) == list:
-            cromossome2 = np.array(cromossome2)
-        """
-
-        """
-        -> len(cromossome1): 
-            Specifica la popolazione di cui estrarre i numeri casuali. 
-                In questo caso, è lunghezza del cromosoma cromossome1.
-        -> size=2: 
-            Specifica il numero di campioni da estrarre. 
-                Qui vogliamo ottenere due indici per rappresentare la porzione del cromosoma da scambiare.
-        -> replace=False: 
-            Garantisce che i numeri estratti siano unici. 
-                Se replace fosse True (il valore predefinito), potremmo ottenere duplicati.
-        
-        La funzione restituirà: 
-            N.B -> Quindi, il risultato di (genes) sarà un array di due elementi
-                ognuno rappresentante un indice casuale nell'intervallo da 0 a len(cromossome) - 1. 
-                Ad esempio, [2, 4] indica che sono stati selezionati casualmente gli indici 2 e 4 dall'array cromossome.
-        """
-
-        #print("----- Siamo nella funzione Crossover -----")
         # print("Stampiamo due vincitori del torneo _ring: ", "\n", cromossome1, "\n", cromossome2)
 
         genes = np.random.choice(len(cromossome1), size=2, replace=False)
         genes.sort()
-        # print("Stampiamo l'intervallo di  indici  ottenuti casualmente del primo cromosoma: ", genes)
-        """
-        Queste due linee di codice stanno estraendo una porzione specifica da ciascun cromosoma genitore,
-            utilizzando gli indici precedentemente generati.
-        -> aux1 = cromossome1[genes[0]:genes[1] + 1]: 
-            Estrae una porzione del cromosoma cromossome1 che va dall'indice genes[0] all'indice genes[1] inclusi.
-                L'operazione + 1 è necessaria per includere l'indice finale nella porzione.
-
-        -> aux2 = cromossome2[genes[0]:genes[1] + 1]: 
-                Analogamente, estrae una porzione dal cromosoma cromossome2 con lo stesso intervallo di indici.
-        Ex: se gli indici ottenuti da genes sono [1 8], allora dentro aux1 andiamo a mettere gli elementi che partono dall'indice 1 fino a 8 incluso
-        N.B -> Questo processo di estrazione è una parte chiave dell'operatore di crossover. La porzione estratta da 
-        ciascun cromosoma verrà quindi combinata per creare i cromosomi figli durante la fase di crossover"""
-
-        #print("-----")
+        # print("-----",genes)
 
         aux1 = cromossome1[genes[0]:genes[1] + 1]
         # print("Estrazione dal cromosoma 1", " con valori ", aux1)
         aux2 = cromossome2[genes[0]:genes[1] + 1]
         # print("Estrazione dal cromosoma 2", " con valori ", aux2)
-        #print("-----")
-        """Queste differenze rappresentano le parti di cromosomi che non sono state incluse nelle porzioni estratte 
-        durante l'operazione di crossover. -> np.in1d(cromossome2, aux1, assume_unique=True) restituisce un array di 
-        bool che indica, quali elementi di cromosome2 sono presenti un aux1, con ~ davanti, andiamo a negare il 
-        risultato dell'istruzione ottenendo gli elementi del cromosoma2 che non sono stati utilizzati per il 
-        crossover"""
-        #print("-----")
+        # print("-----")
 
-        # diff2 = cromossome2[~np.in1d(cromossome2, aux1, assume_unique=True)]
-        diff2 = [gene for gene in cromossome2 if gene not in aux1]
-        # print("Parti del cromosoma non incluse durante l'operazione di crossover eseguito: ", diff2)
-        # diff1 = cromossome1[~np.in1d(cromossome1, aux2, assume_unique=True)]
-        diff1 = [gene for gene in cromossome1 if gene not in aux2]
+        diff1 = [gene for gene in cromossome2 if gene not in aux1]
         # print("Parti del cromosoma non incluse durante l'operazione di crossover eseguito: ", diff1)
-        #print("-----")
+        diff2 = [gene for gene in cromossome1 if gene not in aux2]
+        # print("Parti del cromosoma non incluse durante l'operazione di crossover eseguito: ", diff2)
+        # print("-----")
 
-        """
-        Ci consente di formare i cromosomi figli: aggiungendo in coda agli elementi estratti per il crossover di aux1,
-            la differenza tra gli elementi non presenti del cromosoma2.
-        Stessa cosa fatta anche per child2
-        """
-        #print("-----")
-
-        aux1.extend(diff2)
-        aux2.extend(diff1)
+        aux1.extend(diff1)
+        aux2.extend(diff2)
         # print("Stampa dei figli ottenuti combinando gli elementi estratti dal primo e secondo cromosoma, con l'aggiunta degli elementi che non sono stati presi durante il crossover ", "\n", aux1, "\n", aux2)
-        #print("-----")
+        # print("-----")
         return aux1, aux2
 
     """
@@ -343,6 +267,7 @@ class GA:
         # for individual in population:
         # print(individual)
         mutated_population = population.copy()
+        # print("Mutazione", mutated_population)
 
         # Seleziona casualmente due indici diversi
         index1, index2 = random.sample(range(len(population)), 2)
@@ -353,41 +278,9 @@ class GA:
 
         # print("Stampa della popolazione dopo l'operazione di mutation:")
 
-        # for individual in mutated_population:
-        # print(individual)
+        # print(mutated_population)
 
         return mutated_population
-
-    """
-    def _mutation(self, cromossome):
-        print("----- Siamo nel metodo _Mutation: -----")
-        print("Stampa del cromosoma: ", "\n", cromossome)
-
-        #mutated_array = cromossome.copy()  # Creiamo una copia dell'array originale per non modificarlo direttamente
-        mutated_array = [list(sub_array) for sub_array in cromossome]
-
-        for i, sub_array in enumerate(mutated_array):  # Iteriamo su ciascun array interno
-            if len(sub_array) > 1:  # Assicuriamoci che l'array interno abbia almeno due elementi per poter mutare
-                # Selezioniamo casualmente due indici all'interno dell'array interno
-                idx1, idx2 = np.random.choice(len(sub_array), size=2, replace=False)
-                print("Estazione degli indici: ", idx1, idx2, " dal cromosoma: ", sub_array,
-                      "al fine di scambiarli nello stesso cromosoma")
-
-                #Scambiamo i valori ai due indici selezionati
-                #cp = mutated_array[i][idx1]
-                # print("idx1", mutated_array[i][idx1])
-                # print("idx2", mutated_array[i][idx2])
-                #mutated_array[i][idx1] = mutated_array[i][idx2]
-                #mutated_array[i][idx2] = cp  # Questa è la linea corretta
-                # print("i", mutated_array[i])
-
-                mutated_array[i][idx1], mutated_array[i][idx2] = mutated_array[i][idx2], mutated_array[i][idx1]
-
-        mutated_array = [tuple(sub_array) for sub_array in mutated_array]
-        # print("Stampa del cromosoma prima: ", cromossome)
-        # print("Stampa del cromosoma dopo: ", mutated_array)
-        return mutated_array  # Dovresti restituire l'array mutato, non l'originale
-    """
 
     """Il punteggio di fitness viene calcolato sommando i valori restituiti dalla funzione _findOverlap per le 
     sovrapposizioni tra coppie di letture sequenziali nel cromosoma.
@@ -396,6 +289,7 @@ class GA:
     cromosoma, restituendo il punteggio totale di fitness del cromosoma. Questo punteggio sarà utilizzato per 
     valutare quanto bene il cromosoma si adatta all'ambiente o all'obiettivo specifico dell'algoritmo genetico."""
 
+    # Usata per calcolare gli overlap tra due letture di interi: return sum(overlap)
     def findOverlapNew(self, finger, finger1):
         # print("Finger e finger 1", finger, finger1)
         # print("Siamo nel metodo findOverlapNew")
@@ -409,6 +303,7 @@ class GA:
         # print("somma:", sum(overlap))
         return sum(overlap)
 
+    # Usata per calcolare L'overlap tra due letture: return overlap
     def findOverlapGenoma(self, finger1, finger2):
         # print("Finger e finger 1", finger, finger1)
         # print("Siamo nel metodo findOverlapNew")
@@ -423,26 +318,18 @@ class GA:
         # print("somma:", sum(overlap))
         return overlap
 
-    def _fitness(self, cromossome):
+    # Funzione di fitness, la quale calcola il punteggio per ogni individuo
+    def _fitness(self, cromosoma):
         score = 0
+        array_valori = [valori for _, valori in cromosoma]
 
+        for i in range(len(array_valori) - 1):
+            finger = array_valori[i]
+            finger1 = array_valori[i + 1]
+            # print("1 -> ",finger, "2 -> ",finger1)
+            # Calcola l'overlap solo se le due sequenze sono identiche
 
-        # Modifica
-        # print("Popolazione", cromossome)
-        valori = [val for key, val in cromossome]
-
-        # print(valori)
-
-        # Itera sulla lista di liste in maniera sequenziale
-        for i in range(len(valori) - 1):
-            # Stampa la lista corrente e la lista successiva
-            ciccio = remove_zeros(valori[i])
-            cecio = remove_zeros(valori[i + 1])
-            # print("CIccio", ciccio)
-            # print("Cecio", cecio)
-            score += self.findOverlapNew(ciccio, cecio)
-
-            # print("SCORE:", score)
+            score += self.findOverlapNew(finger, finger1)
 
         return score
 
@@ -455,7 +342,7 @@ class GA:
     def _evaluatePopulation(self, population, gen):
         scores = np.zeros(len(population))
 
-        #min_distance = float('inf')  # Inizializza la distanza minima come infinito
+        # min_distance = float('inf')  # Inizializza la distanza minima come infinito
         min_genome = None  # Inizializza il genoma con la distanza minima
         popy = []
         print("----- Siamo dentro il metodo _evaluatePopulation ")
@@ -463,13 +350,13 @@ class GA:
         # print("Stampa della popolazione: ", population)
         # fitness_map = {}
         for x in range(len(population)):
-            #print("Popolazione ", population[x])
+            # print("Popolazione ", population[x])
             scores[x] = self._fitness(population[x])
-            #genomePopolation = assemble_genome_with_overlaps(population[x])
-            #print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
-            #print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
-            #print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
-            #current_distance = levenshtein(gen, genomePopolation)
+            # genomePopolation = assemble_genome_with_overlaps(population[x])
+            # print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
+            # print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
+            # print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
+            # current_distance = levenshtein(gen, genomePopolation)
             # Controlla se la distanza corrente è minore della distanza minima
             """
             if current_distance < min_distance:
@@ -484,7 +371,6 @@ class GA:
         # Estrai le chiavi e i valori dal dizionario
         # popolazione = list(fitness_map.keys())
         # sfitness_values = list(fitness_map.values())
-
 
         """
         # Crea un array con i numeri da 0 a len(fitness_values)-1
@@ -514,32 +400,6 @@ class GA:
         # print("Distanza tra popypopy", levenshtein(popypopy, gen), "\nGenoma Popy:", popypopy)
         """
         return scores
-
-
-"""
-La funzione _ring è un metodo di selezione per un algoritmo genetico che implementa il torneo. 
-In questo contesto, il torneo è formato da un gruppo casuale di individui (fighter) estratti dalla popolazione,
-    e il vincitore è l'individuo con il fitness più alto all'interno di questo gruppo.
-    -> Viene creato un array fighters che contiene gli indici degli individui selezionati casualmente dalla popolazione (pop_fitness)
-    -> Viene ottenuto un sottoarray fit che contiene i valori di fitness corrispondenti agli indici estratti.
-"""
-
-
-def _ring(self, pop_fitness, ring_size):
-    print("-----------------------")
-    print("Siamo nel metodo _ring")
-    # Si crea un array contenente indici casuali di dim = 3, estratti da pop_fitness
-    fighters = np.random.choice(len(pop_fitness), size=self.ring_size, replace=False)
-    print("Array contenente 3 indici casuali: ", fighters, "estratti da pop_fitness", pop_fitness)
-    # Otteniamo un array contenente i valori fitness corrispondenti agli indici estratti (fighters)
-    fit = pop_fitness[fighters]
-    print("Array contenente i valori fitness degli indici estratti: ", fit)
-    winner = fit.argmax()
-    print("L'indice con il valore fitness più alto: ", winner)
-    print("-----------------")
-    # winner sarà l'indice dell'individuo vincente.
-    print("Il valore e", fighters[winner])
-    return fighters[winner]
 
 
 # ------------------------ CFL ---------------------------------------------------------------------
@@ -580,115 +440,323 @@ def CFL(word, T):
 
 """
     La funzione count_repeats prende in input una lista di stringhe reads e restituisce un dizionario repeats_count che 
-        conta quante volte ciascun prefisso di lunghezza da 3 a max_length appare in reads.
+        conta quante volte ciascun prefisso di lunghezza da countRepeat a max_length appare in reads.
 
-    Per ogni lunghezza di prefisso da 3 a max_length, e per ogni stringa in reads, la funzione estrae il prefisso di 
+    Per ogni lunghezza di prefisso da  countRepeat a max_length, e per ogni stringa in reads, la funzione estrae il prefisso di 
         quella lunghezza e conta quante volte appare in reads, aggiungendo questo conteggio al dizionario repeats_count
 """
 
 
-def count_repeats(reads):
-    #print(reads)
+def count_repeats(reads, countRepeat):
+    # print(reads)
     repeats_count = {}
     max_length = len(reads[0])
 
-    for k in range(3, max_length + 1):
+    for k in range(countRepeat, max_length + 1):
         for read in reads:
             prefix = read[:k]
             repeats_count.setdefault(prefix, 0)
             repeats_count[prefix] += sum(1 for r in reads if prefix in r)
-
+    # print(repeats_count)
     return repeats_count
 
 
-def apply_CFL_to_reads(reads, markers1,markers2):
-    CFL_array = []
-    mappa = {}
+def apply_CFL_to_reads(reads, markers):
+    cfl_list = []
+    marker_indices = []
 
-    # Itera attraverso le letture
-    for lettura in reads:
-        # Trova l'indice dell'occorrenza del marcatore nella lettura
-        indice_marcatore = lettura.find(markers1)
-        #print("marcatore", markers1)
-        #print("lettura", lettura)
-        #print("indice marcatore", indice_marcatore)
-        if indice_marcatore != -1:
-            if indice_marcatore == 0:
-                CFL_prima = CFL(lettura[: len(markers1)], markers1)
-                #print("CFL_prima", CFL_prima)
-                CFL_dopo = CFL(lettura[len(markers1):], markers1)
-                #print("CFL_dopo", CFL_dopo)
-                CFL_prima.extend(CFL_dopo)
-                mappa[lettura] = CFL_prima
-            else:
-                # Applica l'algoritmo CFL alla parte prima del marcatore
-                CFL_prima = CFL(lettura[:indice_marcatore], markers1)
-                #print("CFL_prima", CFL_prima)
-                # Applica l'algoritmo CFL alla parte dopo del marcatore
-                CFL_dopo = CFL(lettura[indice_marcatore:], markers1)
-                #print("CFL_dopo", CFL_dopo)
-                # Aggiungi la CFL della parte prima e della parte dopo del marcatore all'array
-                CFL_prima.extend(CFL_dopo)
-                mappa[lettura] = CFL_prima
-                # print("LETTURA", lettura)
+    # Trova tutti gli indici dei marcatori nella sequenza
+    start = 0
+    while start < len(reads):
+        found_indices = [(reads.find(marker, start), marker) for marker in markers if reads.find(marker, start) != -1]
+        if not found_indices:
+            break
+        idx, marker = min(found_indices, key=lambda x: x[0])
+        marker_indices.append((idx, marker))
+        start = idx + len(marker)
+
+    if not marker_indices:
+        cfl_list.append(reads)
+        segments = CFL(reads[:], None)
+        lista_appiattita = [elemento for sottolista in segments for elemento in sottolista]
+        result = (reads, lista_appiattita)
+        return result
+
+    # Se la sequenza inizia senza un marcatore, aggiungi la parte iniziale come CFL
+    if marker_indices and marker_indices[0][0] > 0:
+        cfl_list.append(CFL(reads[:marker_indices[0][0]], None))
+
+    # Calcola le CFL sulla base degli indici dei marcatori
+    i = 0
+    while i < len(marker_indices) - 1:
+        start_idx, current_marker = marker_indices[i]
+        next_idx, next_marker = marker_indices[i + 1]
+
+        # Controlla se i marcatori non sono consecutivi
+        if start_idx + len(current_marker) <= next_idx:
+            cfl_list.append(CFL(reads[start_idx:next_idx], None))
         else:
-            CFL_not = CFL(lettura[:], markers1)
-            #print("CFL not", CFL_not)
-            mappa[lettura] = [CFL_not]
-        # print("CFL array:", CFL_array)
-    # Stampa le CFL
-    return mappa
+            # Trova il prossimo marcatore che non si sovrappone
+            j = i + 1
+            while j < len(marker_indices) and start_idx + len(current_marker) > marker_indices[j][0]:
+                j += 1
+            if j < len(marker_indices):
+                cfl_list.append(CFL(reads[start_idx:marker_indices[j][0]], None))
+            else:
+                cfl_list.append(CFL(reads[start_idx:], None))
+                break
+        i += 1
+
+    # Aggiungi l'ultimo segmento se esiste
+    if marker_indices:
+        last_idx, last_marker = marker_indices[-1]
+        if last_idx + len(last_marker) <= len(reads):
+            cfl_list.append(CFL(reads[last_idx:], None))
+
+    lista_appiattita = [elemento for sottolista in cfl_list for elemento in sottolista]
+    result = (reads, lista_appiattita)
+    return result
+
+
+def process_read(reads, marker, ma, mamma):
+    # print("Sono nell'else, marcatori utilizzati sono:", marker, ma, mamma)
+    cfl_list = []
+    marker_indices = []
+
+    # Trova tutti gli indici dei marcatori nella sequenza
+    start = 0
+    while start < len(reads):
+        idx1 = reads.find(marker, start)
+        idx2 = reads.find(ma, start)
+        idx3 = reads.find(mamma, start)
+        if idx1 == -1 and idx2 == -1 and idx3 == -1:
+            break
+        if idx1 != -1 and (idx2 == -1 or idx1 < idx2) and (idx3 == -1 or idx1 < idx3):
+            marker_indices.append((idx1, marker))
+            start = idx1 + len(marker)
+        elif idx2 != -1 and (idx1 == -1 or idx2 < idx1) and (idx3 == -1 or idx2 < idx3):
+            marker_indices.append((idx2, ma))
+            start = idx2 + len(ma)
+        elif idx3 != -1:
+            marker_indices.append((idx3, mamma))
+            start = idx3 + len(mamma)
+
+    if not marker_indices:
+        cfl_list.append(reads)
+        segments = CFL(reads[:], None)
+        lista_appiattita = [elemento for sottolista in segments for elemento in sottolista]
+        result = (reads, lista_appiattita)
+        return result
+
+    # Se la sequenza inizia senza un marcatore, aggiungi la parte iniziale come CFL
+    if marker_indices and marker_indices[0][0] > 0:
+        cfl_list.append(CFL(reads[:marker_indices[0][0]], None))
+
+    # Calcola le CFL sulla base degli indici dei marcatori
+    i = 0
+    while i < len(marker_indices) - 1:
+        start_idx, current_marker = marker_indices[i]
+        next_idx, next_marker = marker_indices[i + 1]
+
+        # Controlla se i marcatori non sono consecutivi
+        if start_idx + len(current_marker) <= next_idx:
+            cfl_list.append(CFL(reads[start_idx:next_idx], None))
+        else:
+            # Trova il prossimo marcatore che non si sovrappone
+            j = i + 1
+            while j < len(marker_indices) and start_idx + len(current_marker) > marker_indices[j][0]:
+                j += 1
+            if j < len(marker_indices):
+                cfl_list.append(CFL(reads[start_idx:marker_indices[j][0]], None))
+            else:
+                cfl_list.append(CFL(reads[start_idx:], None))
+                break
+        i += 1
+
+    # Aggiungi l'ultimo segmento se esiste
+    if marker_indices:
+        last_idx, last_marker = marker_indices[-1]
+        if last_idx + len(last_marker) <= len(reads):
+            cfl_list.append(CFL(reads[last_idx:], None))
+
+    lista_appiattita = [elemento for sottolista in cfl_list for elemento in sottolista]
+    result = (reads, lista_appiattita)
+    return result
+
+""" Non più utilizzata
+def apply_CFL_to_reads(reads, marker, ma, terzo):
+    result = {}
+    # print(reads)
+    flag = True
+    # print(GA.compute_overlap(marker,ma))
+    valueOverlap = GA.compute_overlap(marker, ma)
+    segments = []
+
+    # print(valueOverlap[1])
+    # Caso in cui sono sottoinsiemi tra di loro
+    if is_subset(marker, ma) or is_subset(ma, marker):
+        print("Sono nel if")
+        # Utilizzo il marcatore più grande
+        useMarker = marker if len(marker) > len(ma) else ma
+        # Se il marcatore è presente, calcolo la CFL.
+        if find_marker_index(reads, useMarker) != -1:
+            # print(find_marker_positions(reads,useMarker))
+            # Qui ottengo una tupla delle posizioni del marcatore
+            listaMarker = find_marker_positions(reads, useMarker)
+            # Qui ottengo una lista delle posizioni
+            start_positions = [start for start, length in listaMarker]
+            # print(start_positions)
+
+            # Qui vado a eliminare i marcatori innestati.
+            list = []
+            for x in range(len(start_positions) - 1):
+                if start_positions[x] + len(useMarker) > start_positions[x + 1]:
+                    list.append(start_positions[x + 1])
+            # print(list)
+
+            # Qui effettuo delle operazioni per ottenere solamente gli indici dei marcatori.
+            set1 = set(start_positions)
+            set2 = set(list)
+            set3 = set1.difference(set2)
+            l = []
+            for x in set3:
+                l.append(x)
+            start_positions = l
+
+            # print(start_positions)
+
+            # Qui vado a inserire lo 0 se non è presente, permettendomi di iniziare a calcolare la CFL da quel punto
+            if 0 not in start_positions:
+                start_positions.append(0)
+            start_positions.sort()
+            # print(start_positions)
+
+            # Cicla attraverso la lista di indici
+            for i in range(len(start_positions) - 1):
+                start = start_positions[i]
+                end = start_positions[i + 1]
+
+                # Estrai il pezzo della stringa e calcola la CFL
+                segment = CFL(reads[start:end], None)
+                segments.append(segment)
+            # Calcola la CFL per l'ultimo segmento (dall'ultimo indice fino alla fine della stringa)
+            last_segment = CFL(reads[start_positions[-1]:], None)
+            segments.append(last_segment)
+            lista_appiattita = [elemento for sottolista in segments for elemento in sottolista]
+            result = (reads, lista_appiattita)
+            flag = False
+            # print('qui', result)
+            return result
+        else:
+            # Caso in cui non trovo il marcatore nella lettura -> calcolo la CFL su tutta la reads
+            segments.append(CFL(reads[:], None))
+            lista_appiattita = [elemento for sottolista in segments for elemento in sottolista]
+            result = (reads, lista_appiattita)
+            flag = False
+            return result
+    # Caso in cui trovo un overlap tra suffisso e prefisso dei marcatori
+    else:
+        print("Sono nell'else, marcatori utilizzati sono:", marker, ma)
+        cfl_list = []
+        marker_indices = []
+        # print(reads)
+        # Trova tutti gli indici dei marcatori nella sequenza
+        start = 0
+        while start < len(reads):
+            idx1 = reads.find(marker, start)
+            idx2 = reads.find(ma, start)
+
+            if idx1 == -1 and idx2 == -1:
+                break
+            if idx1 != -1 and (idx2 == -1 or idx1 < idx2):
+                marker_indices.append((idx1, marker))
+                start = idx1 + len(marker)
+            elif idx2 != -1:
+                marker_indices.append((idx2, ma))
+                start = idx2 + len(ma)
+
+        if not marker_indices:
+            cfl_list.append(reads)
+            segments = CFL(reads[:], None)
+            lista_appiattita = [elemento for sottolista in segments for elemento in sottolista]
+            result = (reads, lista_appiattita)
+            # print("Caso in cui non trovo nessun marcatore per la lettura", result)
+            return result
+
+        # Se la sequenza inizia senza un marcatore, aggiungi la parte iniziale come CFL
+        if marker_indices and marker_indices[0][0] > 0:
+            cfl_list.append(CFL(reads[:marker_indices[0][0]], None))
+
+        # Calcola le CFL sulla base degli indici dei marcatori
+        i = 0
+        while i < len(marker_indices) - 1:
+            start_idx, current_marker = marker_indices[i]
+            next_idx, next_marker = marker_indices[i + 1]
+
+            # Controlla se i marcatori non sono consecutivi
+            if start_idx + len(current_marker) <= next_idx:
+                cfl_list.append(CFL(reads[start_idx:next_idx], None))
+            else:
+                # Trova il prossimo marcatore che non si sovrappone
+                j = i + 1
+                while j < len(marker_indices) and start_idx + len(current_marker) > marker_indices[j][0]:
+                    j += 1
+                if j < len(marker_indices):
+                    cfl_list.append(CFL(reads[start_idx:marker_indices[j][0]], None))
+                else:
+                    cfl_list.append(CFL(reads[start_idx:], None))
+                    break
+            i += 1
+
+        # Aggiungi l'ultimo segmento se esiste
+        if marker_indices:
+            last_idx, last_marker = marker_indices[-1]
+            if last_idx + len(last_marker) <= len(reads):
+                cfl_list.append(CFL(reads[last_idx:], None))
+
+        lista_appiattita = [elemento for sottolista in cfl_list for elemento in sottolista]
+        result = (reads, lista_appiattita)
+        return result
+"""
 
 
 # Given a list of factors return the fingerprint
-def compute_fingerprint_by_list_factors(list_fact, reads):
-    # print(list_fact)
-
-    #print("-------------------------")
-
-    lunghezze_array = []
-
-    new_map = {}
-    for chiave, valore in list_fact.items():
-        new_list = []
-        for x in valore:
-            # Se x è una lista, calcola la lunghezza di ogni stringa nella lista
-            if isinstance(x, list):
-                new_list.extend([len(item) for item in x])
-            # Altrimenti, calcola solo la lunghezza di x
-            else:
-                new_list.append(len(x))
-        new_map[chiave] = new_list
-    """
-    for elemento in list_fact:
-        lunghezze_elemento = [len(sub_elemento) for sub_elemento in elemento]
-        lunghezze_array.append(lunghezze_elemento)
-
-    # print("Array delle lunghezze:", lunghezze_array)
-
-    # Trova la lunghezza massima tra gli elementi dell'array
-    max_len = max(len(sublist) for sublist in lunghezze_array)
-
-    # Aggiungi zeri a ciascun elemento dell'array fino a raggiungere la lunghezza massima
-    for sublist in lunghezze_array:
-        while len(sublist) < max_len:
-            sublist.append(0)
-    """
-    #print("---------")
-    #print(new_map)
-    return new_map
+def compute_fingerprint_by_list_factors(original_list):
+    oggetto_trasformato = []
+    for chiave, lista_stringhe in original_list:
+        # Converti ogni stringa nella lista nella sua lunghezza
+        lunghezze = [len(stringa) for stringa in lista_stringhe]
+        oggetto_trasformato.append((chiave, lunghezze))
+    return oggetto_trasformato
 
 
-def find_max_read_per_sequence(repeats_count):
-    # Inizializziamo un nuovo dizionario per memorizzare le sequenze e i loro conteggi
-    max_reads = {}
+def find_unique_markers(reads, num_markers):
+    # Ordina le sequenze per frequenza e lunghezza in ordine decrescente
+    sorted_reads = sorted(reads.items(), key=lambda x: (-x[1], -len(x[0])))
 
-    # Iteriamo attraverso il dizionario dato
-    for sequence, count in repeats_count.items():
-        # Aggiungiamo la sequenza come chiave e il suo conteggio come valore
-        max_reads[sequence] = count
+    unique_markers = []
 
-    return max_reads
+    for current_marker in sorted_reads:
+        # Verifica che il marcatore corrente non sia un sottoinsieme di nessuno dei marcatori selezionati
+        is_subset = False
+        for selected_marker in unique_markers:
+            if current_marker[0] in selected_marker[0] or selected_marker[0] in current_marker[0]:
+                is_subset = True
+                break
+        if not is_subset:
+            unique_markers.append(current_marker)
+        if len(unique_markers) == num_markers:
+            break
+
+    return unique_markers
+
+
+def generate_random_populations(reads, num_populations, population_size):
+    populations = []
+    for _ in range(num_populations):
+        population = random.sample(reads, population_size)
+        populations.append(population)
+    return populations
 
 
 def qlearning(reads, episodes, genome=None, test_each_episode=False):
@@ -705,98 +773,101 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     # Caso in cui abbiamo un dataset diviso in piu letture
     readsGenoma = ''.join(reads)
     reads = ''.join(reads)
-    #print(readsGenoma)
+    # print(readsGenoma)
 
-    reads = createDataset(reads,sottosequenza_lunghezza)
-
-    #print(len(count_repeats(reads)))
+    reads = createDataset(reads, sottosequenza_lunghezza)
+    # print(reads)
+    # print(len(count_repeats(reads)))
 
     # for x in reads:
     # print("Lettura: ", x)
-
-    dict = count_repeats(reads)
-    #print(dict)
+    countRepeat = 15
+    dict = count_repeats(reads, countRepeat)
+    # print(dict)
     # print(count_repeats(reads))
 
     print("------------")
     marker = []
-    #print("Le letture sono:", reads)
+    # print("Le letture sono:", reads)
 
+    marksIndependent = 7
+    max_readss = find_unique_markers(dict, marksIndependent)
+    print('3 marcatori distinti', max_readss)
 
-    max_reads = find_max_read_per_sequence(dict)
-    sequenze_frequenti = sorted(max_reads.items(), key=lambda x: x[1], reverse=True)[:2]
+    #max_readss = find_unique_markers(dict, 2)
+    #print('2 marcatori distinti', max_readss)
 
-    markers = chiavi = [sequenza for sequenza, valore in sequenze_frequenti]
-    firstMark, secondMark = markers[0],markers[1]
-    print("Combinazione di due marcatori", firstMark,secondMark)
+    markers = chiavi = [sequenza for sequenza, valore in max_readss]
+    print("Combinazione dei marcatori", markers)
 
     print("------------")
+    results = []
+    results2 = []
+    for x in range(len(reads)):
+        #print("Lettura", reads[x])
+        resul = apply_CFL_to_reads(reads[x], markers)
+        #risp = apply_CFL_to_reads(reads[x], markers)
+        #print("Due marcatori:", risp)
+        #print("Tre marcatori:", resul)
+        results.append(resul)
+        #results2.append(risp)
 
-    results = apply_CFL_to_reads(reads,firstMark,secondMark)
-    print("Risultato ottenuto:", results)
+    # print("Risultato ottenuto:", results)
 
-    _intA = compute_fingerprint_by_list_factors(results, reads)
+    _intA = compute_fingerprint_by_list_factors(results)
+    #_intB = compute_fingerprint_by_list_factors(results2)
     print("------------")
-    #print("FingerPrint del Marcatore ", firstMark, secondMark, " è ", _intA)
 
     # Modificato da me, prima era 60
-    num_ind = 16
+    num_ind = 200
     ga = GA()
-    # Si inizializza una lista vuota memory che verrà utilizzata per memorizzare sequenze di letture in modo casuale.
-    memory = []
-    # inizializza aux come una lista di indici che corrispondono alle posizioni delle letture nella lista reads
 
     # Creo una lista di indici
     indices = list(range(len(_intA)))
-    mescolamento = 70
-    # Creo una lista vuota per contenere gli array mescolati
-    shuffled_arrays = []
 
-    # Modificia
-    listaValori = list(_intA.values())
-    arrayString = []
-    #print(listaValori)
+    popolazioni_mescolate = generate_random_populations(_intA, num_ind, len(_intA))
+    #popolazioni_mescolate2 = generate_random_populations(_intB, num_ind, len(_intB))
+    # print(popolazioni_mescolate)
 
-    # Mescolo gli indici e creo un nuovo array per 3 volte
-    popolazioni = [(chiave, valore) for chiave, valore in _intA.items()]
-    popolazioni_mescolate = []
-    #print("Popolazioni", popolazioni)
-    for _ in range(mescolamento):
-        # Crea una copia delle popolazioni per non modificare l'originale
-        popolazioni_copia = popolazioni.copy()
-        # Mescola la copia
-        random.shuffle(popolazioni_copia)
-        # Aggiungi la popolazione mescolata al contenitore
-        popolazioni_mescolate.append(popolazioni_copia)
+    print("----")
+    for i, sublist in enumerate(popolazioni_mescolate):
+        # print("Popolazione", sublist)
+        chiavi = [tupla[0] for tupla in sublist]
 
-    # Ora popolazioni_mescolate contiene tutte le tue popolazioni mescolate
-    for i, popolazione in enumerate(popolazioni_mescolate):
-        print(f"Popolazione mescolata {i + 1}: {popolazione}")
+        # Conversione della lista di chiavi in una singola stringa
+        stringa_chiavi = ''.join(chiavi)
+        # print(stringa_chiavi)
+        # print(len(stringa_chiavi))
 
-    print("----------")
-    """
-    Il risultato ottenuto dall'esecuzione del GA, è la popolazione evoluta
-        Utilizziamo [0] poichè ci interessa estrarre la popolazione evoluta.
-    """
-    # print("Meomory:", memory)
 
     ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, reads)][0])
+    #print("----- Passaggio alla seconda esecuzione del GA")
+
+    #ind_evolved2 = list([ga.run_ga(None, popolazioni_mescolate2, reads)][0])
     print("--------------------")
     print("Siamo nel metodo Q-learning: ")
-    # print("inizializza aux come una lista di indici che corrispondono alle posizioni delle letture nella lista reads: ", indices)
-    # slice = np.array(shuffled_arrays)
-    # print("Memory, rappresenta la popolazione iniziale: ", slice)
     print("--------------------")
-    print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico: ", ind_evolved)
+    print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Tre marcatori: ", ind_evolved)
+    #print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Due marcatori: ", ind_evolved2)
+
     genomePopolation = assemble_genome_with_overlaps(ind_evolved)
-    print("Due genomi da confrontare:\n","Genoma di partenza:", readsGenoma, "\nGenomae ottenuto dal GA:", genomePopolation)
-    print("Distanza di Levenshtein: ", levenshtein(readsGenoma, genomePopolation))
+    #genomePopolation2 = assemble_genome_with_overlaps(ind_evolved2)
+
+    print("Due genomi da confrontare:\n", "Genoma di partenza:", readsGenoma,
+          "\nGenoma  ottenuto dal GA dei 3 marcatori:",
+          genomePopolation)
+    print("Distanza di Levenshtein dati i 3 marcatori: ", levenshtein(readsGenoma, genomePopolation))
+
     """
-    for i in range(len(ind_evolved)):
-        print("indice: ", i, "lettura: ", reads[i])
+    print("---------------")
+    print("Due genomi da confrontare:\n", "Genoma di partenza:", readsGenoma,
+          "\nGenoma  ottenuto dal GA dei 2 marcatori:",
+          genomePopolation2)
+    print("Distanza di Levenshtein dati i 2 marcatori: ", levenshtein(readsGenoma, genomePopolation2))
     """
     print("--------------------")
-    #print("genoma", genome)
+
+    # print("genoma", genome)
     test = test_ga(root, factor, genome, ind_evolved, reads)
 
     print("ind_evolved:", ind_evolved, "test_rw:", "%.5f" % test[1], "test:", test[0], "dist:", test[2])
@@ -951,17 +1022,16 @@ def test_ga(root_node, factor, genome, ind_evolved, reads):
 
 
 def createDataset(dataset, lunghezza_sottosequenza):
-
     # Definiamo i 4 caratteri
-    #caratteri = ['A', 'C', 'G','T']
+    # caratteri = ['A', 'C', 'G','T']
 
     # Creiamo un dataset di 2000 caratteri scelti casualmente tra i 4
-    #dataset = ''.join(np.random.choice(caratteri) for _ in range(2000))
+    # dataset = ''.join(np.random.choice(caratteri) for _ in range(2000))
 
-    #print(dataset)
+    # print(dataset)
     # Dividiamo il dataset in sottosequenze di 100 caratteri
-    #sottosequenze = [dataset[i:i + 100] for i in range(0, len(dataset), 100)]
-    #return sottosequenze
+    # sottosequenze = [dataset[i:i + 100] for i in range(0, len(dataset), 100)]
+    # return sottosequenze
 
     # Calcola il numero massimo di pezzi sovrapposti
     sottosequenze = []
@@ -970,12 +1040,12 @@ def createDataset(dataset, lunghezza_sottosequenza):
     while indice_inizio < len(dataset) - lunghezza_sottosequenza + 1:
         # Genera la sottosequenza corrente
         sottosequenza = dataset[indice_inizio:indice_inizio + lunghezza_sottosequenza]
-        #print("sottosequenza estratta", sottosequenza)
+        # print("sottosequenza estratta", sottosequenza)
         sottosequenze.append(sottosequenza)
-        #print("sottosequenza estratta", sottosequenze)
+        # print("sottosequenza estratta", sottosequenze)
         # Seleziona un indice casuale per l'overlap
         indice_casuale = random.randint(1, lunghezza_sottosequenza - 1)
-        #print("INDICE CASUALE", indice_casuale)
+        # print("INDICE CASUALE", indice_casuale)
         # Aggiorna l'indice di inizio per la prossima sottosequenza
         indice_inizio += indice_casuale
 
@@ -1075,9 +1145,8 @@ if __name__ == "__main__":
                       'TAACCATTTTAACAG', 'AACATAACAGGCTAA', 'CTAAGAGGGGCCGGA', 'AGGCTAAGAGGGGCC', 'CTAAGAGGGGCCGGA']
 
     readProva = 'TCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCGCGATGCAGTGTCCCTGAATAATCCAAACAACCTCGCCGCGGTCGCATGCGCCGCACGAAAGCCGGAAACTATTCACCTCTGTTTACTGAATGCTATGCGGAGCAGGAACCAGCAATCCTCGATTGTCTCCAGCGTAAAGAAGTGTCGCGCTCTTCCTTGATCACTAACGCGCAGCGGTAGCAAGATCTGCTTTCTACGGTTACGCGAACCAAACAGACTTGGGCGGCCACCTGCAGGTCAAGTACTAATATATAAGCACGGGAATACCACATCATGACGTGAACGATCGCAGCCTTAAAGACAGAATGTATATGCCTAGGCCCGCATATGCCCAACGACTTACAATCGGTGTATCCCTCTAGGTTGAGATCAACAGGAGTAGTCACCTTGAACCTGATATTGGAAGAGCGTGGTGCTGCACACCAAGGTGATCGGAGGTACGTGCAGGGTTACTAGCGATGCAGCAGGCAATGATTTGTTACTTATATCATTGTACGCAACAAGGTTGTGGGGAGGTTGCGTAAATCGGCGGCGCCCCGCCTTCCTCTACCCGGACATCGATTTTTCCGACCTCCACGAGAACTACTCGAGAACCCGAGCCTGAGTAAACCGGTATACAACTCTAGGCAAGTGCGCTACCCCTTTTACGCGTGAACGGAGCCGCTTTTCCCCCATAGTGCGTAAAGCGGTATGTTTAAATTTACTGTGGCGTTATGCGTCGCAGGTGTATGACCGGCTCGTCAGCGGCCACAGGCATCACGTAATATTTAGCGCTGGTCTTTGTTTTCTGTGATCGAATGGAAGGAGTCATTTATGCCACGAGGATATGACGAATAGTCTATCGTCTGCTAGGCAAGGTAAAAAAGTCAAGAATGAGACGGTGTTTGGCGCTATACCCCACTACAGAAACATATTGCTGCCCCGCGGCTCATGTCGTGCTGGGGTCCCTGTATAACAGCTGACACGACAAGCCGAGGCATCTATGACATCGACTAAAACTCTGGGTCGCGTTATGGTGGACCAGGCACGTACGGGGCGTAGCGCCTATTAAATTAGTCCAAAAGACATTTTTTGGTGACAGTGCTGCCCGACGACGTCCCTAGAATAACCAAAATAGGTCACAAAATATTGTCTTGTTCATGATAATCGATCTTTTTTTGGCAAAGCATCAGAAGTCTACCAGTCAGTTCTTAGCCCAGTGAGAGGGTGATTGGGCGCCAGATCGTAGTCAAATTACGGAGACGATTCTTTGCGTAAAATTGCTCCCGTGAGGGCGAGAATCGGAACAGCGACGATTTATTGCGGCGCGACTCGGGAGATTGACAGGAATACCGAATGGCTAGCTTGTAAATTTAAATAGGAATCCATTGTTCCTAAAGCAGATTAGCGCCGATCCGAGCGTAAACCGGCCGCTGAACGCACGGCGTCATCTGGTTGAACTACTATTGGTAGTAGGAATCACATATGGGTGGTTACTTGTTAGCTTTGTACGCATTGGTTATTCCGCAAAAGGTACAGACTGAACCACTATGTAGCATCCATGTTCTCGATGGCACAAGTTCTCACATGTACGTCATCACGGCACCTGACGCCTAGTTGACCAAAATCTCCGTTGCGGCGACAAACGGCTTCCCTATGAAACGGCATGCAGTCATTTCGGCACACGAGATATTGGGGACAGTGCCTAACTCTCGGTGCCCCTTTTAAAGCAAAATGATGCTTGGTGGCTGGTTACAAAGCCCAGCAGGCATCTCGGATAGTTGTCGCATTTTCTGTCGACAATCGTGACTAGTTGATCTGCACACATAGATGGGCTTACTCCATGCGGCATTTACGCTATCGTATCGGTCATTTACACTACTGCAGGACAGCGAGCGGGGCGTCCATCGAACATGAAGTTCAGGACGGCAACGTGTGGTTAATGTCCTGCGAAGCTTTAACTTAAAGGCGAT'
-    #readProva = 'TCACTTABCD'
-
-
+    # readProva = 'TCATATCCCT'
+    #readProva = 'AACACTGCAACTCTAAAACACTGCAACTAACACTGCAACTCTAAAACACTGCAACTCTAACACTGCACACTGCACTGCAACTCTAACACTGCACACTGCACTATCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCG'
 
     reads_381_20_75 = ['AAAGAAGCCGCAGCAAAAGCGTTTGGCACCGGGATCCGCAATGGTCTGGCGTTTAATCAATTTGAAGTATTCAAT',
                        'GGCGTTGCAAATATGCATGTAACGCTGGCAGATGAGCGGCACTATGCTTGTGCCACGGTAATTATTGAAAGTTAA',
