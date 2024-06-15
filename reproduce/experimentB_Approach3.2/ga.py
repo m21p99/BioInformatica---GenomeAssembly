@@ -28,11 +28,16 @@ class GA:
     La sovrapposizione è calcolata utilizzando i parametri match, mismatch e gap per assegnare punteggi alle corrispondenze tra i caratteri delle due sottostringhe.
     """
 
+
+
+
+
+
     def run_ga(self, env, pop, gen):
         print("----- Siamo nel metodo run_GA -----")
         # print("Stampa delle varie letture: ", reads)
         pop_size = len(pop)
-
+        #print("pop", pop_size)
         population = pop
         # print("Popolazione iniziale: ")
 
@@ -41,7 +46,6 @@ class GA:
             for individuo in popolazione:
                 sequenza, lista_numeri = individuo
                 # print(f"  Sequenza: {sequenza}, Numeri: {lista_numeri}")
-
         # print("Le letture sono: ", reads)
         pop_fitness = self._evaluatePopulation(population, gen)
         print(pop_fitness)
@@ -61,8 +65,8 @@ class GA:
         best_fit = self._fitness(best_ind)
         # print("Valore fitness dell'individuo migliore: ", best_fit)
 
-        mescolamento = 100
-        for generation in range(mescolamento):
+        iterazioni = 400
+        for generation in range(iterazioni):
             print("---------")
             print('Esecuzione')
             # Tournament selection
@@ -163,8 +167,8 @@ class GA:
             if l == r:
                 return l, size
         return "", 0
-
     """
+
 
     """
     La funzione _getOverlap calcola la sovrapposizione massima tra due stringhe s1 e s2 utilizzando una matrice di programmazione dinamica.
@@ -351,6 +355,8 @@ class GA:
         # fitness_map = {}
         for x in range(len(population)):
             # print("Popolazione ", population[x])
+            #if gen == population[x]:
+                #print("Trovato qui", self._fitness(population[x]))
             scores[x] = self._fitness(population[x])
             # genomePopolation = assemble_genome_with_overlaps(population[x])
             # print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
@@ -752,8 +758,8 @@ def find_unique_markers(reads, num_markers):
 
 
 def generate_random_populations(reads, num_populations, population_size):
-    populations = []
-    for _ in range(num_populations):
+    populations = [reads]
+    for _ in range(num_populations - 1):
         population = random.sample(reads, population_size)
         populations.append(population)
     return populations
@@ -771,26 +777,33 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     sottosequenza_lunghezza = 100
 
     # Caso in cui abbiamo un dataset diviso in piu letture
-    readsGenoma = ''.join(reads)
-    reads = ''.join(reads)
+    #readsGenoma = ''.join(reads)
     # print(readsGenoma)
-
+    i = 0
+    #print(reads)
+    genomePartenza = copy.copy(reads)
     reads = createDataset(reads, sottosequenza_lunghezza)
-    # print(reads)
+    #print(reads)
+    individuo = copy.copy(reads)
     # print(len(count_repeats(reads)))
 
     # for x in reads:
     # print("Lettura: ", x)
-    countRepeat = 15
+
+
+
+    # Dimensione del marcatore -> da 4 a 8
+    countRepeat = 5
     dict = count_repeats(reads, countRepeat)
-    # print(dict)
+    #print(dict)
     # print(count_repeats(reads))
 
     print("------------")
     marker = []
     # print("Le letture sono:", reads)
 
-    marksIndependent = 7
+    #  Marcatori Indipendenti
+    marksIndependent = 20
     max_readss = find_unique_markers(dict, marksIndependent)
     print('3 marcatori distinti', max_readss)
 
@@ -818,29 +831,33 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     #_intB = compute_fingerprint_by_list_factors(results2)
     print("------------")
 
-    # Modificato da me, prima era 60
-    num_ind = 200
+    # Popolazione
+    num_ind = 400
     ga = GA()
 
     # Creo una lista di indici
     indices = list(range(len(_intA)))
-
+    print(_intA)
+    indConfront = copy.copy(_intA)
     popolazioni_mescolate = generate_random_populations(_intA, num_ind, len(_intA))
     #popolazioni_mescolate2 = generate_random_populations(_intB, num_ind, len(_intB))
     # print(popolazioni_mescolate)
+
 
     print("----")
     for i, sublist in enumerate(popolazioni_mescolate):
         # print("Popolazione", sublist)
         chiavi = [tupla[0] for tupla in sublist]
-
+        array_di_interi = [tupla[1] for tupla in sublist]
         # Conversione della lista di chiavi in una singola stringa
         stringa_chiavi = ''.join(chiavi)
-        # print(stringa_chiavi)
-        # print(len(stringa_chiavi))
+        chunks = [stringa_chiavi[i:i + len(individuo[0])] for i in range(0, len(stringa_chiavi), len(individuo[0]))]
+        #print(chunks)
+        #if individuo == chunks:
+            #print("Trovato", chunks)
 
 
-    ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, reads)][0])
+    ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, indConfront)][0])
     #print("----- Passaggio alla seconda esecuzione del GA")
 
     #ind_evolved2 = list([ga.run_ga(None, popolazioni_mescolate2, reads)][0])
@@ -850,13 +867,14 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Tre marcatori: ", ind_evolved)
     #print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Due marcatori: ", ind_evolved2)
 
+
     genomePopolation = assemble_genome_with_overlaps(ind_evolved)
     #genomePopolation2 = assemble_genome_with_overlaps(ind_evolved2)
 
-    print("Due genomi da confrontare:\n", "Genoma di partenza:", readsGenoma,
-          "\nGenoma  ottenuto dal GA dei 3 marcatori:",
+    print("Due genomi da confrontare:\n", "Genoma di partenza:\n", genomePartenza,
+          "\nGenoma  ottenuto dal GA dei 3 marcatori:\n",
           genomePopolation)
-    print("Distanza di Levenshtein dati i 3 marcatori: ", levenshtein(readsGenoma, genomePopolation))
+    print("Distanza di Levenshtein dati i",markers , "marcatori e di: ", levenshtein(genomePartenza, genomePopolation))
 
     """
     print("---------------")
@@ -912,23 +930,25 @@ def levenshtein(s, t, costs=(1, 1, 1)):
                                  dist[row - 1][col - 1] + cost)  # substitution
     return dist[rows - 1][cols - 1]
 
-
 def assemble_genome_with_overlaps(reads):
+    #print("reads:", reads)
     genome = reads[0][0]
+    #print("qui", genome)
     for i in range(len(reads) - 1):
         current_read, current_overlaps = reads[i]
         current_read2, current_overlaps2 = reads[i + 1]
-        # print(current_read, current_overlaps, "\n", current_read2, current_overlaps2)
+        #print(current_read, current_overlaps, "\n", current_read2, current_overlaps2)
 
         lista = GA.findOverlapGenoma(None, current_overlaps, current_overlaps2)
+        #print("lista", lista)
         if (len(lista) > 0):
             stringa_concatenata = current_read2[sum(lista):]
-            # print("Stringa conc", stringa_concatenata)
+            #print("Stringa conc", stringa_concatenata)
             genome += stringa_concatenata
-            # print("Genoma", genome)
+            #print("Genoma", genome)
         else:
             genome += current_read2
-            # print("Genoma", genome)
+            #print("Genoma", genome)
     return genome
 
 
@@ -1036,7 +1056,7 @@ def createDataset(dataset, lunghezza_sottosequenza):
     # Calcola il numero massimo di pezzi sovrapposti
     sottosequenze = []
     indice_inizio = 0
-
+    k = 0
     while indice_inizio < len(dataset) - lunghezza_sottosequenza + 1:
         # Genera la sottosequenza corrente
         sottosequenza = dataset[indice_inizio:indice_inizio + lunghezza_sottosequenza]
@@ -1054,6 +1074,18 @@ def createDataset(dataset, lunghezza_sottosequenza):
             # Aggiungi l'ultima sottosequenza che include la fine della sequenza
             sottosequenze.append(dataset[-lunghezza_sottosequenza:])
             break
+        k = k + 1
+    """
+    i = 0
+    car = 0
+    print(sottosequenze)
+    for x in sottosequenze:
+        print(len(x))
+        car += len(x)
+        i += 1
+
+    print("DIM", len(sottosequenze),i, car)
+    """
 
     return sottosequenze
 
@@ -1145,7 +1177,7 @@ if __name__ == "__main__":
                       'TAACCATTTTAACAG', 'AACATAACAGGCTAA', 'CTAAGAGGGGCCGGA', 'AGGCTAAGAGGGGCC', 'CTAAGAGGGGCCGGA']
 
     readProva = 'TCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCGCGATGCAGTGTCCCTGAATAATCCAAACAACCTCGCCGCGGTCGCATGCGCCGCACGAAAGCCGGAAACTATTCACCTCTGTTTACTGAATGCTATGCGGAGCAGGAACCAGCAATCCTCGATTGTCTCCAGCGTAAAGAAGTGTCGCGCTCTTCCTTGATCACTAACGCGCAGCGGTAGCAAGATCTGCTTTCTACGGTTACGCGAACCAAACAGACTTGGGCGGCCACCTGCAGGTCAAGTACTAATATATAAGCACGGGAATACCACATCATGACGTGAACGATCGCAGCCTTAAAGACAGAATGTATATGCCTAGGCCCGCATATGCCCAACGACTTACAATCGGTGTATCCCTCTAGGTTGAGATCAACAGGAGTAGTCACCTTGAACCTGATATTGGAAGAGCGTGGTGCTGCACACCAAGGTGATCGGAGGTACGTGCAGGGTTACTAGCGATGCAGCAGGCAATGATTTGTTACTTATATCATTGTACGCAACAAGGTTGTGGGGAGGTTGCGTAAATCGGCGGCGCCCCGCCTTCCTCTACCCGGACATCGATTTTTCCGACCTCCACGAGAACTACTCGAGAACCCGAGCCTGAGTAAACCGGTATACAACTCTAGGCAAGTGCGCTACCCCTTTTACGCGTGAACGGAGCCGCTTTTCCCCCATAGTGCGTAAAGCGGTATGTTTAAATTTACTGTGGCGTTATGCGTCGCAGGTGTATGACCGGCTCGTCAGCGGCCACAGGCATCACGTAATATTTAGCGCTGGTCTTTGTTTTCTGTGATCGAATGGAAGGAGTCATTTATGCCACGAGGATATGACGAATAGTCTATCGTCTGCTAGGCAAGGTAAAAAAGTCAAGAATGAGACGGTGTTTGGCGCTATACCCCACTACAGAAACATATTGCTGCCCCGCGGCTCATGTCGTGCTGGGGTCCCTGTATAACAGCTGACACGACAAGCCGAGGCATCTATGACATCGACTAAAACTCTGGGTCGCGTTATGGTGGACCAGGCACGTACGGGGCGTAGCGCCTATTAAATTAGTCCAAAAGACATTTTTTGGTGACAGTGCTGCCCGACGACGTCCCTAGAATAACCAAAATAGGTCACAAAATATTGTCTTGTTCATGATAATCGATCTTTTTTTGGCAAAGCATCAGAAGTCTACCAGTCAGTTCTTAGCCCAGTGAGAGGGTGATTGGGCGCCAGATCGTAGTCAAATTACGGAGACGATTCTTTGCGTAAAATTGCTCCCGTGAGGGCGAGAATCGGAACAGCGACGATTTATTGCGGCGCGACTCGGGAGATTGACAGGAATACCGAATGGCTAGCTTGTAAATTTAAATAGGAATCCATTGTTCCTAAAGCAGATTAGCGCCGATCCGAGCGTAAACCGGCCGCTGAACGCACGGCGTCATCTGGTTGAACTACTATTGGTAGTAGGAATCACATATGGGTGGTTACTTGTTAGCTTTGTACGCATTGGTTATTCCGCAAAAGGTACAGACTGAACCACTATGTAGCATCCATGTTCTCGATGGCACAAGTTCTCACATGTACGTCATCACGGCACCTGACGCCTAGTTGACCAAAATCTCCGTTGCGGCGACAAACGGCTTCCCTATGAAACGGCATGCAGTCATTTCGGCACACGAGATATTGGGGACAGTGCCTAACTCTCGGTGCCCCTTTTAAAGCAAAATGATGCTTGGTGGCTGGTTACAAAGCCCAGCAGGCATCTCGGATAGTTGTCGCATTTTCTGTCGACAATCGTGACTAGTTGATCTGCACACATAGATGGGCTTACTCCATGCGGCATTTACGCTATCGTATCGGTCATTTACACTACTGCAGGACAGCGAGCGGGGCGTCCATCGAACATGAAGTTCAGGACGGCAACGTGTGGTTAATGTCCTGCGAAGCTTTAACTTAAAGGCGAT'
-    # readProva = 'TCATATCCCT'
+    #readProva = 'TCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGC'
     #readProva = 'AACACTGCAACTCTAAAACACTGCAACTAACACTGCAACTCTAAAACACTGCAACTCTAACACTGCACACTGCACTGCAACTCTAACACTGCACACTGCACTATCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCG'
 
     reads_381_20_75 = ['AAAGAAGCCGCAGCAAAAGCGTTTGGCACCGGGATCCGCAATGGTCTGGCGTTTAATCAATTTGAAGTATTCAAT',
