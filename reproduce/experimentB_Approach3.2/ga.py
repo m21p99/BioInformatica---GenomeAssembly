@@ -33,8 +33,9 @@ class GA:
 
 
 
-    def run_ga(self, env, pop, gen):
-        print("----- Siamo nel metodo run_GA -----")
+    def run_ga(self, env, pop, gen, iterazioni):
+        #print("----- Siamo nel metodo run_GA -----")
+
         # print("Stampa delle varie letture: ", reads)
         pop_size = len(pop)
         #print("pop", pop_size)
@@ -65,10 +66,9 @@ class GA:
         best_fit = self._fitness(best_ind)
         # print("Valore fitness dell'individuo migliore: ", best_fit)
 
-        iterazioni = 400
         for generation in range(iterazioni):
-            print("---------")
-            print('Esecuzione')
+            #print("---------")
+            print('Iterazione n: ', generation)
             # Tournament selection
             selected = []
             # seleCpy = []
@@ -103,7 +103,7 @@ class GA:
 
             # print("----------------------")
 
-            print("Ridefiniamo i valori fitness della popolazione modificata: ")
+            #print("Ridefiniamo i valori fitness della popolazione modificata: ")
             # print(array)
             # print("----------------------")
 
@@ -111,12 +111,12 @@ class GA:
             # print("Popolazione dopo l'aggiunta di", best_ind)
 
             pop_fitness = self._evaluatePopulation(population, gen)
-            print(pop_fitness)
+            #print(pop_fitness)
             value = pop_fitness.max()
-            print("------------------")
-            print("L'obiettivo è quello di mantenere nelle generazioni successive il miglior individuo: ")
-            print("Stampa il valore massimo di fitness della generazione attuale: ", value)
-            print("Mentre il valore massimo di fitness fino ad ora e di ", best_fit)
+            #print("------------------")
+            #print("L'obiettivo è quello di mantenere nelle generazioni successive il miglior individuo: ")
+            #print("Stampa il valore massimo di fitness della generazione attuale: ", value)
+            #print("Mentre il valore massimo di fitness fino ad ora e di ", best_fit)
 
             """
             Questo blocco di codice implementa una strategia di elitismo nell'algoritmo genetico. L'obiettivo è
@@ -330,11 +330,11 @@ class GA:
         for i in range(len(array_valori) - 1):
             finger = array_valori[i]
             finger1 = array_valori[i + 1]
-            # print("1 -> ",finger, "2 -> ",finger1)
+            #print("1 -> ",finger, "2 -> ",finger1)
             # Calcola l'overlap solo se le due sequenze sono identiche
 
             score += self.findOverlapNew(finger, finger1)
-
+            #print("score", score)
         return score
 
     """
@@ -349,8 +349,8 @@ class GA:
         # min_distance = float('inf')  # Inizializza la distanza minima come infinito
         min_genome = None  # Inizializza il genoma con la distanza minima
         popy = []
-        print("----- Siamo dentro il metodo _evaluatePopulation ")
-        print("----- Siamo nel metodo _fitness -----")
+        #print("----- Siamo dentro il metodo _evaluatePopulation ")
+        #print("----- Siamo nel metodo _fitness -----")
         # print("Stampa della popolazione: ", population)
         # fitness_map = {}
         for x in range(len(population)):
@@ -772,7 +772,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     generations = episodes
 
     _cromosomeInt = []
-    print("------------")
+    #print("------------")
     #print(reads)
     sottosequenza_lunghezza = 100
 
@@ -793,25 +793,25 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
 
     # Dimensione del marcatore -> da 4 a 8
-    countRepeat = 5
+    countRepeat = 7
     dict = count_repeats(reads, countRepeat)
     #print(dict)
     # print(count_repeats(reads))
 
-    print("------------")
+    #print("------------")
     marker = []
     # print("Le letture sono:", reads)
 
     #  Marcatori Indipendenti
-    marksIndependent = 20
+    marksIndependent = 8
     max_readss = find_unique_markers(dict, marksIndependent)
-    print('3 marcatori distinti', max_readss)
+    #print('3 marcatori distinti', max_readss)
 
     #max_readss = find_unique_markers(dict, 2)
     #print('2 marcatori distinti', max_readss)
 
     markers = chiavi = [sequenza for sequenza, valore in max_readss]
-    print("Combinazione dei marcatori", markers)
+    #print("Combinazione dei marcatori", markers)
 
     print("------------")
     results = []
@@ -829,10 +829,11 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     _intA = compute_fingerprint_by_list_factors(results)
     #_intB = compute_fingerprint_by_list_factors(results2)
-    print("------------")
+    #print("------------")
 
     # Popolazione
-    num_ind = 400
+    num_ind = 700
+    iterazioni = 700
     ga = GA()
 
     # Creo una lista di indici
@@ -844,7 +845,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     # print(popolazioni_mescolate)
 
 
-    print("----")
+    #print("----")
     for i, sublist in enumerate(popolazioni_mescolate):
         # print("Popolazione", sublist)
         chiavi = [tupla[0] for tupla in sublist]
@@ -857,24 +858,22 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
             #print("Trovato", chunks)
 
 
-    ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, indConfront)][0])
+    ind_evolved = list([ga.run_ga(None, popolazioni_mescolate, indConfront, iterazioni)][0])
     #print("----- Passaggio alla seconda esecuzione del GA")
 
     #ind_evolved2 = list([ga.run_ga(None, popolazioni_mescolate2, reads)][0])
-    print("--------------------")
-    print("Siamo nel metodo Q-learning: ")
-    print("--------------------")
-    print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Tre marcatori: ", ind_evolved)
+    #print("--------------------")
+    #print("Siamo nel metodo Q-learning: ")
+    #print("--------------------")
+    #print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Tre marcatori: ", ind_evolved)
     #print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Due marcatori: ", ind_evolved2)
 
 
     genomePopolation = assemble_genome_with_overlaps(ind_evolved)
     #genomePopolation2 = assemble_genome_with_overlaps(ind_evolved2)
 
-    print("Due genomi da confrontare:\n", "Genoma di partenza:\n", genomePartenza,
-          "\nGenoma  ottenuto dal GA dei 3 marcatori:\n",
-          genomePopolation)
-    print("Distanza di Levenshtein dati i",markers , "marcatori e di: ", levenshtein(genomePartenza, genomePopolation))
+    #print("Due genomi da confrontare:\n", "Genoma di partenza:\n", genomePartenza,"\nGenoma  ottenuto dal GA dei 3 marcatori:\n",genomePopolation)
+    #print("Distanza di Levenshtein dati i",markers , "marcatori e di: ", levenshtein(genomePartenza, genomePopolation))
 
     """
     print("---------------")
@@ -883,12 +882,287 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
           genomePopolation2)
     print("Distanza di Levenshtein dati i 2 marcatori: ", levenshtein(readsGenoma, genomePopolation2))
     """
-    print("--------------------")
+    #print("--------------------")
 
     # print("genoma", genome)
-    test = test_ga(root, factor, genome, ind_evolved, reads)
+    #test = test_ga(root, factor, genome, ind_evolved, reads)
 
-    print("ind_evolved:", ind_evolved, "test_rw:", "%.5f" % test[1], "test:", test[0], "dist:", test[2])
+    #print("ind_evolved:", ind_evolved, "test_rw:", "%.5f" % test[1], "test:", test[0], "dist:", test[2])
+
+    filename = "Test_" + str(marksIndependent) + "Marks_" + str(countRepeat) + "Dim" + ".txt"
+    print(filename)
+
+    contenuto = f"NumIndividui: {num_ind}, NumIterazioni: {iterazioni}, Distanza di Levenshtein dati i markers {markers} e di: {levenshtein(genomePartenza, genomePopolation)}\n"
+
+    with open(filename, 'a') as file:
+        file.write(contenuto)
+
+    """
+    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 4
+    Num_individui = 200
+    iterazioni = 200
+    Distanza di levenshtein: 
+        1898 -> ['TCAT', 'GCGG', 'GTCA', 'AAAT']
+        1815 -> ['ATTG', 'CGAT', 'TCAC', 'GTCA']
+        1939 -> ['TCAT', 'TGCG', 'TAGG', 'AGCC'] 
+        1631 -> ['TTAC', 'ATCG', 'ATTG', 'GCGT']
+        1774 -> ['ACGG', 'TAAA', 'GTCT', 'GAAT'] 
+        2413 -> ['GCAT', 'AACC', 'TATG', 'CATT']
+        1971 -> ['GGCG', 'GAAT', 'CTTT', 'ATCG']
+        1804 -> ['GCGG', 'ACGA', 'GGTG', 'TTCC']
+        1505 -> ['GAAC', 'TTAC', 'ACCA', 'CGAT']
+        1653 -> ['TATG', 'TCAT', 'CTCT', 'CGCT']
+        2262 -> ['GGTG', 'GAAT', 'TTAC', 'CATC']
+        2147 -> ['TATT', 'ATCA', 'AGAA', 'ATTT']
+        2357 -> ['TTTA', 'TTAC', 'CTAG', 'AAAG']
+        1634 -> ['AGCG', 'TTAC', 'CCGC', 'ATCG']
+        2223 -> ['TTAC', 'CGCA', 'CTGA', 'TCGG']
+        2168 -> ['ATCT', 'TGCC', 'TAAA', 'ACTA']
+    """
+
+    """
+    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 5
+    Num_individui = 200
+    iterazioni = 200
+    Distanza di levenshtein: 
+        1219
+        1233
+        1167
+        1468
+        1517
+        1279
+        1607
+        2291
+        1426
+        1021
+        1842
+        1727
+        1326
+        1725
+        1672
+        2168
+        ----
+        1589
+        1209
+        1199
+        1329
+        1292
+        1391
+        1117
+        1080
+        1304
+        1569
+        1458
+        1871
+        2515
+        1527
+        1277
+        1441
+        
+    """
+
+    """
+    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 6
+    Num_individui = 200
+    iterazioni = 200
+    Distanza di levenshtein:
+        1007
+        959
+        968
+        1184
+        884
+        1061
+        946
+        1182
+        1377
+        1292
+        981
+        1200
+        1274
+        1168
+        939
+        1074
+        ----
+        869
+        1007   
+        1118
+        921
+        931
+        981
+        1056
+        1210
+        1039
+        992
+        1282
+        993
+        1046
+        881
+        901
+        999        
+    """
+
+    """
+        Utilizzo di 4 Marcatori indipendenti, di dimensione >= 7
+        Num_individui = 200
+        iterazioni = 200
+        Distanza di levenshtein:
+            968
+            834
+            922
+            932
+            1051
+            1046
+            918
+            969
+            955
+            1152
+            975
+            1008
+            981
+            982
+            918
+            ---
+            995
+            898
+            1324
+            954
+            939
+            912
+            951
+            1066
+            1027
+            883
+            971
+            971
+            1006
+            894
+            929
+            917
+        ------------
+        Utilizzo di 5 Marcatori indipendenti, di dimensione >= 7
+        Num_individui = 200
+        iterazioni = 200
+        Distanza di levenshtein:
+            949
+            957
+            948
+            1189
+            942
+            1003
+            886
+            926
+            908
+            1004
+            1238
+            931
+            941
+            965
+            945
+            944
+            ---
+            991
+            976
+            938
+            923
+            980
+            997
+            903
+            1005
+            912
+            924
+            930
+            938
+            935
+            898
+            983
+            872
+            ------
+        Utilizzo di 6 Marcatori indipendenti, di dimensione >= 7
+        Num_individui = 200
+        iterazioni = 200
+        Distanza di levenshtein:
+            
+    """
+
+    """
+    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 8
+        Num_individui = 200
+        iterazioni = 200
+        Distanza di levenshtein:
+            1009
+            934
+            975
+            921
+            1026
+            1207
+            914
+            975
+            1121
+            927
+            915
+            897
+            988
+            1018
+            1014
+            957
+            ---
+            940
+            1011
+            917
+            976
+            961
+            919
+            1003
+            963
+            960
+            872
+            948
+            1124
+            1193
+            1017
+            966
+    """
+
+    """
+    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 9
+        Num_individui = 200
+        iterazioni = 200
+        Distanza di levenshtein:
+            1012
+            1052
+            961
+            956
+            1225
+            1063
+            1144
+            913
+            965
+            945
+            1027
+            1013
+            1024
+            949
+            1083
+            992
+            ---
+            937
+            976
+            959
+            939
+            1038
+            1023
+            1030
+            942
+            1071
+            971
+            1238
+            956
+            1019
+            939
+            1097
+            1322
+    """
+
 
 
 def levenshtein(s, t, costs=(1, 1, 1)):
@@ -992,7 +1266,7 @@ def test_ga(root_node, factor, genome, ind_evolved, reads):
                                      dist[row - 1][col - 1] + cost)  # substitution
         return dist[rows - 1][cols - 1]
 
-    print("----- Siamo nel metodo  test_ga -----")
+    #print("----- Siamo nel metodo  test_ga -----")
     grafo = nx.DiGraph()
     cur_node = root_node
 
@@ -1031,11 +1305,11 @@ def test_ga(root_node, factor, genome, ind_evolved, reads):
     for chiave, valore in zip(actions, ricompense):
         mappa[chiave] = valore
     """
-    for chiave, valore in mappa.items():
-        print(f"Azione: {chiave}, Ricompensa: {valore}, Lettura: {reads[chiave]}")
+    #for chiave, valore in mappa.items():
+        #print(f"Azione: {chiave}, Ricompensa: {valore}, Lettura: {reads[chiave]}")
     dist = None
-    print("IL consenso ottenuto partendo dal nodo corrente e risalendo fino alla radice: ", cur_node.get_consensus())
-    print("Il genoma: ", genome)
+    #print("IL consenso ottenuto partendo dal nodo corrente e risalendo fino alla radice: ", cur_node.get_consensus())
+    #print("Il genoma: ", genome)
     if genome is not None:
         dist = levenshtein(cur_node.get_consensus(), genome)
     return actions, total_reward, dist
@@ -1578,4 +1852,6 @@ if __name__ == "__main__":
     dataset[24] = (genome25, readProva)
 
     genome, reads = dataset[int(sys.argv[2])]
-    qlearning(reads, int(sys.argv[1]), genome)
+    for i in range(30):
+        print(f"Esecuzione {i + 1}/20")
+        qlearning(reads, int(sys.argv[1]), genome)

@@ -1,0 +1,10 @@
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['CGCAT', 'AAAGC', 'GTTAT', 'CATCA', 'ATATG', 'CTCCA', 'AATGG'] e di: 1188
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['GCAGG', 'GTTAC', 'ATCGG', 'CACAT', 'CGTAAA', 'CTACT', 'ACAGA'] e di: 1283
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['AGTCA', 'GCAGG', 'ATCGG', 'AATCG', 'ATATG', 'AGCAG', 'CAAGGT'] e di: 1419
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['ATTGG', 'TTACT', 'CAGGCA', 'AATCG', 'AAAAT', 'CACCT', 'GCCTA'] e di: 1447
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['TCTGC', 'GCGTA', 'CGTCA', 'AACCA', 'ACCTG', 'CATTT', 'GGGCG'] e di: 1531
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['GACAT', 'ATATT', 'TTACA', 'TCCCT', 'CACGA', 'CAGCG', 'ATGAT'] e di: 1766
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['GAATA', 'GTACG', 'TGAAC', 'GTCGC', 'ATTTA', 'CTGAA', 'AGCTT'] e di: 1793
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['GTAAA', 'GCGGC', 'CGCAA', 'GCGCC', 'ATTTA', 'GAATA', 'GGCAT'] e di: 1853
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['ATTGG', 'GTATA', 'AGTCA', 'ATCGG', 'TTACA', 'CATTT', 'TAAAG'] e di: 1885
+NumIndividui: 300, NumIterazioni: 300, Distanza di Levenshtein dati i markers ['TTACA', 'CAAAC', 'TAAAG', 'CAAAA', 'TGAGA', 'TGCGG', 'GAACC'] e di: 2121
