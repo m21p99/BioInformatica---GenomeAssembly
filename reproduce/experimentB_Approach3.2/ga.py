@@ -501,6 +501,7 @@ def apply_CFL_to_reads(reads, markers):
         # Controlla se i marcatori non sono consecutivi
         if start_idx + len(current_marker) <= next_idx:
             cfl_list.append(CFL(reads[start_idx:next_idx], None))
+
         else:
             # Trova il prossimo marcatore che non si sovrappone
             j = i + 1
@@ -521,6 +522,7 @@ def apply_CFL_to_reads(reads, markers):
 
     lista_appiattita = [elemento for sottolista in cfl_list for elemento in sottolista]
     result = (reads, lista_appiattita)
+    print("Lettura: ", reads, "\nMarcatori Utilizzati: ", markers, "\nRappresentazione CFL: ", cfl_list)
     return result
 
 
@@ -793,7 +795,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
 
     # Dimensione del marcatore -> da 4 a 8
-    countRepeat = 7
+    countRepeat = 5
     dict = count_repeats(reads, countRepeat)
     #print(dict)
     # print(count_repeats(reads))
@@ -803,7 +805,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     # print("Le letture sono:", reads)
 
     #  Marcatori Indipendenti
-    marksIndependent = 8
+    marksIndependent = 4
     max_readss = find_unique_markers(dict, marksIndependent)
     #print('3 marcatori distinti', max_readss)
 
@@ -832,8 +834,8 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     #print("------------")
 
     # Popolazione
-    num_ind = 700
-    iterazioni = 700
+    num_ind = 1
+    iterazioni = 1
     ga = GA()
 
     # Creo una lista di indici
