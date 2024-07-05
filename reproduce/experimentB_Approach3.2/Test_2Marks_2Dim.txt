@@ -1,0 +1,320 @@
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 13
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTGCACACAAAAACACACTCGCAAACAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTAACAAACACAAACTACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTCACACCAACAAAACTACAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACACTACAAAACTAACAACACACTGACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['CT', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTCTAACAACTAACTGTGCAAAAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAAACACCTGCACTGAAACTAAAACAACT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CAACACAAAACAGCACTCTAAACTG
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CT'] e di: 17
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTCTGCGCACTCTTCTAAAAAAACAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTGGCAAAACTCTCTTAAAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 17
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACACTGCTGCCAAACTCTCTAAAAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTGTGCAAACTTCTAAAAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 9
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTTGCAAACTCTCTTCTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 6
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTTGCAAACTCTCTTAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 9
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACCTGCCAAAACTTCTAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACCTGCAACAACTCTCTTAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 9
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACCTGCAACCTCTTCTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACCTGCCAAACTCCTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTGCTGCAACAACTCTCTTAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CAACCACACCTGCAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 9
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TCTAACACAACAACTCAAAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CT'] e di: 13
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TGCACTAACTGCTGCACTCTGCAACACTCT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 15
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TGCACTAAACACAACAACACACTGAAAAACTC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACAAACAACAAACTGCAACTCAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTCTTAAAAACACAAAACT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACTGACACAACAACTCACACTCTACAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 19
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = GCAAACACAAACACACTCAACACTACTCTAACAAAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CA'] e di: 14
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACAACACTAAACTTAAAAACTTCTAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['CA', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTGCAAACTCTCACTACACAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CT'] e di: 18
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAAAACTAAAACGCAAACACACTCCTCTAACAACT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = GCAACTAAAAAACAGCAACTG
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TAAAACAACAACACTGCAACACTGACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 14
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TAAAACACAAAAAACAAACGCAAAACACTC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTCTTAAAAACAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CACTAAAAACTCTCTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AAAACTAAAAACACTGCACTAAACT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CA'] e di: 9
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TGCAACTAACAACTTCTAAACGCAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 9
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTCTAACAAAACTAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CACTTGCACTAAACACAACAAAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CT'] e di: 14
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTGCACACAAAAACACTCTAAACACTGAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTACTGGCAAACTCCTAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CA'] e di: 15
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACCACTACTGGCAAACACTCCTAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTGGCAAACTCCTCTTAAAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 16
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACCTGCCAAAACCTCTTCTAAAAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 16
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTGCTGCCAAAACACTCTCTAAACAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 7
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTCTAAAAACTGAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AAACAAACTCACACCACTAAAAAACAAACT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CACTCTAAAACTAACAACTGTGCA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 16
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACTTAAAAACAACTCTCTTCTAAACAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TAAAACACAAACCTGCCTCTAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CT'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CACTCTGCACTACCACTACAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = GCAAAACTTAAACTGCACTAACACTCTA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACACTAACAAACAACTGAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 19
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TAAAAACAACTCAAACAACAAAAAACAAACAAAAAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['CT', 'AC'] e di: 15
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACAAACAGCAACAACTCGCACTAAAACTAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACTCTCTAAAAACACAACAACTACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACAACACTAAAACACTAAACCAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 7
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACTCTGCCTAACACTAACACAAAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACTACACAAAACTCTTCTAAAAACCACT
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CA'] e di: 16
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TAAAACAAACAACACCACTCAACACTCCTGC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACCACTACACAAAAAACCCAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTTGCAAACAACTACTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CT'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACACTCAAACGCAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 22
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACCAACAAACACTCACACAACAACACACTGAAACCAAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 19
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = CTCTAAAAACACAAAAACACTGCAACTGACACAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTTGCAAACTCTCTAAAAAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACACTGTGCAACTCCTCTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACTGTGCAAACCTCTAAAAACAACAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = GCAAACAAAAACACTCTACAAAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'CT'] e di: 7
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACTAACTCTAAAACTAAAACA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 10
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACAACAAACAACTAACAAAAACTG
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 8
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACTGACACTAAAACAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'AA'] e di: 7
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = ACACACTCCACTACTAAAAACACAA
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 12
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = GCAACTAAAACAACTGAAAACTAAAAACAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CT'] e di: 16
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = TCTAAAAACACTCTTAAAACAACACCACTC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AA', 'AC'] e di: 11
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = GCAAAACCTCTAAACACGCAAAAC
+
+NumIndividui: 5, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['AC', 'CT'] e di: 13
+GenomaPartenza = AACACTGCAACTCTAAAACAC
+GenomaOttenuto = AACAACACACTGCTGCAACACTCTCTAAAAACAC
+
+NumIndividui: 300, NumIterazioni: 50, Distanza di Levenshtein dati i markers ['GAGT', 'CC'] e di: 106
+GenomaPartenza = TCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCGCAATAGC
+GenomaOttenuto = GAGTGCAATAGCTAGAGTTC
+
+NumIndividui: 10, NumIterazioni: 20, Distanza di Levenshtein dati i markers ['TAG', 'TC'] e di: 46
+GenomaPartenza = TCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCGCAATAGC
+GenomaOttenuto = TCCCTCCCCTAGAGTGCAATTCATATCCCTCCCCTAGAGTCAATAGCTAGAGTGCAATAGCCCCTAGAGTGCAATAGCTA
+
+NumIndividui: 10, NumIterazioni: 100, Distanza di Levenshtein dati i markers ['GA', 'GC'] e di: 106
+GenomaPartenza = TCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCGCAATAGC
+GenomaOttenuto = GAGTGCAATAGCGCAATAGC
+
+NumIndividui: 10, NumIterazioni: 50, Distanza di Levenshtein dati i markers ['GAG', 'AT'] e di: 90
+GenomaPartenza = TCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCTCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGCGCAATAGC
+GenomaOttenuto = ATAGCTAGAGTGCAATAGCTCCCCTAGAGTGCAATA
+
