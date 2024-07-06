@@ -27,12 +27,6 @@ class GA:
         utilizzando una matrice matrix per la programmazione dinamica. 
     La sovrapposizione è calcolata utilizzando i parametri match, mismatch e gap per assegnare punteggi alle corrispondenze tra i caratteri delle due sottostringhe.
     """
-
-
-
-
-
-
     def run_ga(self, env, pop, gen, iterazioni):
         #print("----- Siamo nel metodo run_GA -----")
 
@@ -48,6 +42,7 @@ class GA:
                 sequenza, lista_numeri = individuo
                 # print(f"  Sequenza: {sequenza}, Numeri: {lista_numeri}")
         # print("Le letture sono: ", reads)
+        print(len(population))
         pop_fitness = self._evaluatePopulation(population, gen)
         print(pop_fitness)
         # print("--------------------------------")
@@ -58,7 +53,6 @@ class GA:
         # print(c)
         best_ind = copy.deepcopy(population[c])
         # print(best_ind)
-
         # print("Migliorr individuo della popolazione corrente: \n", best_ind)
         # print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
         # print("---------------------")
@@ -70,28 +64,62 @@ class GA:
             #print("---------")
             print('Iterazione n: ', generation)
             # Tournament selection
-            selected = []
-            # seleCpy = []
+
+            mappa_fitness = []
+
+            # Itera attraverso le popolazioni e la fitness
             for i in range(len(population)):
-                selected.append(population[i].copy())
+                # Tutti gli individui della popolazione
+                individui = population[i]
+
+                # Il valore di fitness corrispondente
+                fitness_corrispondente = pop_fitness[i]
+
+                # Crea una tupla con il valore di fitness e tutti gli individui
+                tupla = (fitness_corrispondente, individui)
+
+                # Aggiungi la tupla alla lista
+                mappa_fitness.append(tupla)
+
+            # Stampa la lista per vedere il risultato
+            for x in mappa_fitness:
+                print("\n", x)
+
+            sorted_data = sorted(mappa_fitness, key=lambda x: x[0], reverse=True)
+            print("-------------")
+
+            for x in sorted_data:
+                print("\n", x)
+
+            population = sorted_data
+
+            n = len(population) // 2
+            population = population[:n]
+
+            print("-----Modifica aver estratto meta popolazione per il crossover")
+            for x in population:
+                print("\n", x)
+
 
             # Crossover
-            for i in range(0, pop_size, 2):
-                # print("i:", i)
-                if i + 1 < len(selected):
-                    if np.random.rand() < self.crossover_prob:
-                        # print("-----------------")
-                        # print("Popo", selected[i])
-                        # print("Popo1", selected[i + 1])
-                        population[i], population[i + 1] = self._crossover(selected[i], selected[i + 1])
-                        # print("Popolazioni ottenute tramite il crossover: \n", population[i])
-                        # print(population[i + 1])
-                    else:
-                        # Qui invece di eseguire l'operazione di crossover, copiamo semplicemente i genitori nella nuova generazione
-                        population[i], population[i + 1] = selected[i].copy(), selected[i + 1].copy()
-                        # print("Operazione di crossover non andata a buon fine: ", population[i], population[i + 1])
+            for i in range(0, len(population) - 1, 2):  # Assicura che i non superi la lunghezza della lista meno uno
+                if np.random.rand() < self.crossover_prob:
+                    #print("Popo", population[i])
+                    #print("Popo1", population[i + 1])
+                    # Esegui il crossover solo se i e i + 1 sono entrambi validi
+                    if i < len(population) - 1:
+                        pop1, pop2 = self._crossover(population[i], population[i + 1])
+                        population.append(pop1)
+                        population.append(pop2)
+
+                # print("Popolazioni ottenute tramite il crossover: \n", population[i])
+                # print(population[i + 1])
             # Mutation
             # print("-----------------")
+            print("-----Modifica dopo crossover")
+            for x in population:
+                print("\n", x)
+
 
             # print("Siamo nel metodo mutation:")
             for i in range(len(population)):
@@ -101,21 +129,37 @@ class GA:
 
             # print("Stampa della popolazione dopo l'operazione di mutation:")
 
+            print("-----Modifica dopo mutation")
+            for x in population:
+                print("\n", x)
+
             # print("----------------------")
 
             #print("Ridefiniamo i valori fitness della popolazione modificata: ")
             # print(array)
             # print("----------------------")
+            print("Best", best_ind)
+            population.append(copy.deepcopy((0.0,best_ind)))
 
-            population.append(copy.deepcopy(best_ind))
+            print("-----Modifica dopo l'aggiunta del miglior individuo")
+            for x in population:
+                print("\n", x)
+
             # print("Popolazione dopo l'aggiunta di", best_ind)
 
+            population = [individuo for fitness, individuo in population]
+            print("----------")
+            for x in population:
+                print("\n", x)
+
             pop_fitness = self._evaluatePopulation(population, gen)
-            #print(pop_fitness)
+            print(pop_fitness)
             value = pop_fitness.max()
+            best_ind = population[pop_fitness.argmax()].copy()
+            print("Miglior individuo:", best_ind)
             #print("------------------")
             #print("L'obiettivo è quello di mantenere nelle generazioni successive il miglior individuo: ")
-            #print("Stampa il valore massimo di fitness della generazione attuale: ", value)
+            print("Stampa il valore massimo di fitness della generazione attuale: ", value)
             #print("Mentre il valore massimo di fitness fino ad ora e di ", best_fit)
 
             """
@@ -124,8 +168,8 @@ class GA:
             miglior individuo individuato finora venga preservato nella popolazione.
             Verifica se la fitness massima nella generazione corrente (fitness_evolution[generation]) è inferiore
             alla fitness del miglior individuo trovato finora (best_fit)
-            """
-            if value < best_fit:
+            
+                        if value < best_fit:
                 best_ind = copy.deepcopy(population[np.argmax(pop_fitness)])
                 population[0] = copy.deepcopy(best_ind)
                 # print("Popolazione 0: ", population[0])
@@ -135,6 +179,8 @@ class GA:
                 best_fit = pop_fitness.max()
                 indexValue = np.argmax(pop_fitness)
                 population[0] = copy.deepcopy(population[indexValue])
+            
+            """
 
         # print("Miglior individuo durante l'evalution:", best_ind)
 
@@ -235,54 +281,82 @@ class GA:
         return population1, population2
     """
 
-    def _crossover(self, cromossome1, cromossome2):
+    import numpy as np
 
-        # print("Stampiamo due vincitori del torneo _ring: ", "\n", cromossome1, "\n", cromossome2)
+    import numpy as np
 
-        genes = np.random.choice(len(cromossome1), size=2, replace=False)
+    import numpy as np
+
+    import numpy as np
+
+    import numpy as np
+
+    import numpy as np
+
+    import numpy as np
+
+    import numpy as np
+
+    def _crossover(self, chromosome1, chromosome2):
+        #print("Cromosoma 1 prima del crossover:", chromosome1)
+        #print("Cromosoma 2 prima del crossover:", chromosome2)
+
+        # Estrai le liste di geni dai cromosomi
+        genes1 = chromosome1[1]
+        genes2 = chromosome2[1]
+
+        # Esegui il crossover solo sulla lista di geni
+        genes = np.random.choice(len(genes1), size=2, replace=False)
         genes.sort()
-        # print("-----",genes)
 
-        aux1 = cromossome1[genes[0]:genes[1] + 1]
-        # print("Estrazione dal cromosoma 1", " con valori ", aux1)
-        aux2 = cromossome2[genes[0]:genes[1] + 1]
-        # print("Estrazione dal cromosoma 2", " con valori ", aux2)
-        # print("-----")
+        #print("Geni selezionati per il crossover:", genes)
 
-        diff1 = [gene for gene in cromossome2 if gene not in aux1]
-        # print("Parti del cromosoma non incluse durante l'operazione di crossover eseguito: ", diff1)
-        diff2 = [gene for gene in cromossome1 if gene not in aux2]
-        # print("Parti del cromosoma non incluse durante l'operazione di crossover eseguito: ", diff2)
-        # print("-----")
+        # Copia dei geni originali per costruire i figli
+        child1_genes = genes1[:]
+        child2_genes = genes2[:]
 
-        aux1.extend(diff1)
-        aux2.extend(diff2)
-        # print("Stampa dei figli ottenuti combinando gli elementi estratti dal primo e secondo cromosoma, con l'aggiunta degli elementi che non sono stati presi durante il crossover ", "\n", aux1, "\n", aux2)
-        # print("-----")
-        return aux1, aux2
+        # Scambio dei geni tra i due cromosomi nei segmenti selezionati
+        for i in range(genes[0], genes[1] + 1):
+            #print(f"Scambio gene {genes1[i][0]} da cromosoma 1 con gene {genes2[i][0]} da cromosoma 2")
+
+            # Scambio delle letture
+            temp_read1 = child1_genes[i][1][:]
+            temp_read2 = child2_genes[i][1][:]
+
+            child1_genes[i] = (genes2[i][0], temp_read2)
+            child2_genes[i] = (genes1[i][0], temp_read1)
+
+        child1 = (0.0, child1_genes)
+        child2 = (0.0, child2_genes)
+
+        #print("Cromosoma 1 dopo il crossover:", child1)
+        #print("Cromosoma 2 dopo il crossover:", child2)
+
+        return child1, child2
 
     """
     Questa funzione seleziona casualmente due geni nel cromosoma e ne scambia i valori.
     """
 
     def _mutation(self, population):
-        # print("----- Siamo nel metodo _Mutation: -----")
-        # print("Stampa della popolazione prima dell'operazione di mutation:")
-        # for individual in population:
-        # print(individual)
-        mutated_population = population.copy()
-        # print("Mutazione", mutated_population)
+        print("Siamo dentro mutation")
+        score = population[0]  # Estrae il punteggio dalla popolazione
+        individuals = population[1].copy()  # Copia la lista degli individui
 
         # Seleziona casualmente due indici diversi
-        index1, index2 = random.sample(range(len(population)), 2)
-        # print("Indici casuali selezionati:", index1, index2)
-
+        index1, index2 = random.sample(range(len(individuals)), 2)
+        #print("indici", index1,index2)
         # Scambia i due individui di posizione
-        mutated_population[index1], mutated_population[index2] = mutated_population[index2], mutated_population[index1]
+        individuals[index1], individuals[index2] = individuals[index2], individuals[index1]
 
-        # print("Stampa della popolazione dopo l'operazione di mutation:")
+        # Costruisce la lista di individui con i nomi e valori modificati
+        mutated_individuals = [
+            (individuo[0], individuo[1]) if i == index1 or i == index2 else individuo
+            for i, individuo in enumerate(individuals)
+        ]
 
-        # print(mutated_population)
+        # Ritorna la popolazione mutata con il punteggio originale
+        mutated_population = (score, mutated_individuals)
 
         return mutated_population
 
@@ -345,66 +419,8 @@ class GA:
 
     def _evaluatePopulation(self, population, gen):
         scores = np.zeros(len(population))
-
-        # min_distance = float('inf')  # Inizializza la distanza minima come infinito
-        min_genome = None  # Inizializza il genoma con la distanza minima
-        popy = []
-        #print("----- Siamo dentro il metodo _evaluatePopulation ")
-        #print("----- Siamo nel metodo _fitness -----")
-        # print("Stampa della popolazione: ", population)
-        # fitness_map = {}
         for x in range(len(population)):
-            # print("Popolazione ", population[x])
-            #if gen == population[x]:
-                #print("Trovato qui", self._fitness(population[x]))
             scores[x] = self._fitness(population[x])
-            # genomePopolation = assemble_genome_with_overlaps(population[x])
-            # print("Due genomi da confrontare:", "\nGenoma Partenza: ", gen)
-            # print("Genoma Ottenuto dalla Popolazione corrente: ", genomePopolation)
-            # print("Distanza di Levenshtein: ", levenshtein(gen, genomePopolation))
-            # current_distance = levenshtein(gen, genomePopolation)
-            # Controlla se la distanza corrente è minore della distanza minima
-            """
-            if current_distance < min_distance:
-                min_distance = current_distance  # Aggiorna la distanza minima
-                min_genome = genomePopolation  # Aggiorna il genoma con la distanza minima
-                popy = population[x]
-            """
-        indeMin = scores.argmin()
-        population.pop(indeMin)
-        scores = np.delete(scores, indeMin)
-
-        # Estrai le chiavi e i valori dal dizionario
-        # popolazione = list(fitness_map.keys())
-        # sfitness_values = list(fitness_map.values())
-
-        """
-        # Crea un array con i numeri da 0 a len(fitness_values)-1
-        population = np.arange(len(scores))
-
-        # Crea un grafico a barre
-        plt.bar(population, scores)
-
-        # Aggiungi le etichette
-        for i in range(len(scores)):
-            plt.text(i, scores[i], str(scores[i]), ha='center')
-
-        # Imposta le etichette dell'asse x
-        plt.xticks(population)
-
-        # Imposta i titoli
-        plt.xlabel('Popolazione')
-        plt.ylabel('Valore di Fitness')
-        plt.title('Valori di Fitness per la Popolazione')
-
-        # Mostra il grafico
-        # plt.show()
-
-        #print("Popy", popy)
-        #popypopy = assemble_genome_with_overlaps(popy)
-
-        # print("Distanza tra popypopy", levenshtein(popypopy, gen), "\nGenoma Popy:", popypopy)
-        """
         return scores
 
 
@@ -484,8 +500,7 @@ def apply_CFL_to_reads(reads, markers):
     if not marker_indices:
         cfl_list.append(reads)
         segments = CFL(reads[:], None)
-        lista_appiattita = [elemento for sottolista in segments for elemento in sottolista]
-        result = (reads, lista_appiattita)
+        result = (reads, segments)
         return result
 
     # Se la sequenza inizia senza un marcatore, aggiungi la parte iniziale come CFL
@@ -522,7 +537,7 @@ def apply_CFL_to_reads(reads, markers):
 
     lista_appiattita = [elemento for sottolista in cfl_list for elemento in sottolista]
     result = (reads, lista_appiattita)
-    print("Lettura: ", reads, "\nMarcatori Utilizzati: ", markers, "\nRappresentazione CFL: ", cfl_list)
+    #print("Lettura: ", reads, "\nMarcatori Utilizzati: ", markers, "\nRappresentazione CFL: ", cfl_list)
     return result
 
 
@@ -776,7 +791,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     _cromosomeInt = []
     #print("------------")
     #print(reads)
-    sottosequenza_lunghezza = 100
+    sottosequenza_lunghezza = 7
 
     # Caso in cui abbiamo un dataset diviso in piu letture
     #readsGenoma = ''.join(reads)
@@ -795,7 +810,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
 
     # Dimensione del marcatore -> da 4 a 8
-    countRepeat = 5
+    countRepeat = 3
     dict = count_repeats(reads, countRepeat)
     #print(dict)
     # print(count_repeats(reads))
@@ -805,7 +820,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     # print("Le letture sono:", reads)
 
     #  Marcatori Indipendenti
-    marksIndependent = 4
+    marksIndependent = 3
     max_readss = find_unique_markers(dict, marksIndependent)
     #print('3 marcatori distinti', max_readss)
 
@@ -834,13 +849,13 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     #print("------------")
 
     # Popolazione
-    num_ind = 1
-    iterazioni = 1
+    num_ind = 10
+    iterazioni = 15
     ga = GA()
 
     # Creo una lista di indici
     indices = list(range(len(_intA)))
-    print(_intA)
+    #print(_intA)
     indConfront = copy.copy(_intA)
     popolazioni_mescolate = generate_random_populations(_intA, num_ind, len(_intA))
     #popolazioni_mescolate2 = generate_random_populations(_intB, num_ind, len(_intB))
@@ -849,7 +864,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
 
     #print("----")
     for i, sublist in enumerate(popolazioni_mescolate):
-        # print("Popolazione", sublist)
+        print(sublist)
         chiavi = [tupla[0] for tupla in sublist]
         array_di_interi = [tupla[1] for tupla in sublist]
         # Conversione della lista di chiavi in una singola stringa
@@ -899,288 +914,22 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     with open(filename, 'a') as file:
         file.write(contenuto)
 
-    """
-    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 4
-    Num_individui = 200
-    iterazioni = 200
-    Distanza di levenshtein: 
-        1898 -> ['TCAT', 'GCGG', 'GTCA', 'AAAT']
-        1815 -> ['ATTG', 'CGAT', 'TCAC', 'GTCA']
-        1939 -> ['TCAT', 'TGCG', 'TAGG', 'AGCC'] 
-        1631 -> ['TTAC', 'ATCG', 'ATTG', 'GCGT']
-        1774 -> ['ACGG', 'TAAA', 'GTCT', 'GAAT'] 
-        2413 -> ['GCAT', 'AACC', 'TATG', 'CATT']
-        1971 -> ['GGCG', 'GAAT', 'CTTT', 'ATCG']
-        1804 -> ['GCGG', 'ACGA', 'GGTG', 'TTCC']
-        1505 -> ['GAAC', 'TTAC', 'ACCA', 'CGAT']
-        1653 -> ['TATG', 'TCAT', 'CTCT', 'CGCT']
-        2262 -> ['GGTG', 'GAAT', 'TTAC', 'CATC']
-        2147 -> ['TATT', 'ATCA', 'AGAA', 'ATTT']
-        2357 -> ['TTTA', 'TTAC', 'CTAG', 'AAAG']
-        1634 -> ['AGCG', 'TTAC', 'CCGC', 'ATCG']
-        2223 -> ['TTAC', 'CGCA', 'CTGA', 'TCGG']
-        2168 -> ['ATCT', 'TGCC', 'TAAA', 'ACTA']
-    """
-
-    """
-    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 5
-    Num_individui = 200
-    iterazioni = 200
-    Distanza di levenshtein: 
-        1219
-        1233
-        1167
-        1468
-        1517
-        1279
-        1607
-        2291
-        1426
-        1021
-        1842
-        1727
-        1326
-        1725
-        1672
-        2168
-        ----
-        1589
-        1209
-        1199
-        1329
-        1292
-        1391
-        1117
-        1080
-        1304
-        1569
-        1458
-        1871
-        2515
-        1527
-        1277
-        1441
-        
-    """
-
-    """
-    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 6
-    Num_individui = 200
-    iterazioni = 200
-    Distanza di levenshtein:
-        1007
-        959
-        968
-        1184
-        884
-        1061
-        946
-        1182
-        1377
-        1292
-        981
-        1200
-        1274
-        1168
-        939
-        1074
-        ----
-        869
-        1007   
-        1118
-        921
-        931
-        981
-        1056
-        1210
-        1039
-        992
-        1282
-        993
-        1046
-        881
-        901
-        999        
-    """
-
-    """
-        Utilizzo di 4 Marcatori indipendenti, di dimensione >= 7
-        Num_individui = 200
-        iterazioni = 200
-        Distanza di levenshtein:
-            968
-            834
-            922
-            932
-            1051
-            1046
-            918
-            969
-            955
-            1152
-            975
-            1008
-            981
-            982
-            918
-            ---
-            995
-            898
-            1324
-            954
-            939
-            912
-            951
-            1066
-            1027
-            883
-            971
-            971
-            1006
-            894
-            929
-            917
-        ------------
-        Utilizzo di 5 Marcatori indipendenti, di dimensione >= 7
-        Num_individui = 200
-        iterazioni = 200
-        Distanza di levenshtein:
-            949
-            957
-            948
-            1189
-            942
-            1003
-            886
-            926
-            908
-            1004
-            1238
-            931
-            941
-            965
-            945
-            944
-            ---
-            991
-            976
-            938
-            923
-            980
-            997
-            903
-            1005
-            912
-            924
-            930
-            938
-            935
-            898
-            983
-            872
-            ------
-        Utilizzo di 6 Marcatori indipendenti, di dimensione >= 7
-        Num_individui = 200
-        iterazioni = 200
-        Distanza di levenshtein:
-            
-    """
-
-    """
-    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 8
-        Num_individui = 200
-        iterazioni = 200
-        Distanza di levenshtein:
-            1009
-            934
-            975
-            921
-            1026
-            1207
-            914
-            975
-            1121
-            927
-            915
-            897
-            988
-            1018
-            1014
-            957
-            ---
-            940
-            1011
-            917
-            976
-            961
-            919
-            1003
-            963
-            960
-            872
-            948
-            1124
-            1193
-            1017
-            966
-    """
-
-    """
-    Utilizzo di 4 Marcatori indipendenti, di dimensione >= 9
-        Num_individui = 200
-        iterazioni = 200
-        Distanza di levenshtein:
-            1012
-            1052
-            961
-            956
-            1225
-            1063
-            1144
-            913
-            965
-            945
-            1027
-            1013
-            1024
-            949
-            1083
-            992
-            ---
-            937
-            976
-            959
-            939
-            1038
-            1023
-            1030
-            942
-            1071
-            971
-            1238
-            956
-            1019
-            939
-            1097
-            1322
-    """
-
 
 
 def levenshtein(s, t, costs=(1, 1, 1)):
     """
-            iterative_levenshtein(s, t) -> ldist
-            ldist is the Levenshtein distance between the strings
-            s and t.
-            For all i and j, dist[i,j] will contain the Levenshtein
-            distance between the first i characters of s and the
-            first j characters of t
+                iterative_levenshtein(s, t) -> ldist
+                ldist is the Levenshtein distance between the strings
+                s and t.
+                For all i and j, dist[i,j] will contain the Levenshtein
+                distance between the first i characters of s and the
+                first j characters of t
 
-            costs: a tuple or a list with three integers (d, i, s)
-                   where d defines the costs for a deletion
-                         i defines the costs for an insertion and
-                         s defines the costs for a substitution
-        """
+                costs: a tuple or a list with three integers (d, i, s)
+                       where d defines the costs for a deletion
+                             i defines the costs for an insertion and
+                             s defines the costs for a substitution
+            """
     rows = len(s) + 1
     cols = len(t) + 1
     deletes, inserts, substitutes = costs
@@ -1190,6 +939,7 @@ def levenshtein(s, t, costs=(1, 1, 1)):
     # by deletions:
     for row in range(1, rows):
         dist[row][0] = row * deletes
+
     # target prefixes can be created from an empty source string
     # by inserting the characters
     for col in range(1, cols):
@@ -1452,8 +1202,8 @@ if __name__ == "__main__":
                       'CAACATAACAGGCTA', 'CAACATAACAGGCTA', 'TTTTAACAGCAACAT', 'AACATAACAGGCTAA', 'CATTTTAACAGCAAC',
                       'TAACCATTTTAACAG', 'AACATAACAGGCTAA', 'CTAAGAGGGGCCGGA', 'AGGCTAAGAGGGGCC', 'CTAAGAGGGGCCGGA']
 
-    readProva = 'TCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCGCGATGCAGTGTCCCTGAATAATCCAAACAACCTCGCCGCGGTCGCATGCGCCGCACGAAAGCCGGAAACTATTCACCTCTGTTTACTGAATGCTATGCGGAGCAGGAACCAGCAATCCTCGATTGTCTCCAGCGTAAAGAAGTGTCGCGCTCTTCCTTGATCACTAACGCGCAGCGGTAGCAAGATCTGCTTTCTACGGTTACGCGAACCAAACAGACTTGGGCGGCCACCTGCAGGTCAAGTACTAATATATAAGCACGGGAATACCACATCATGACGTGAACGATCGCAGCCTTAAAGACAGAATGTATATGCCTAGGCCCGCATATGCCCAACGACTTACAATCGGTGTATCCCTCTAGGTTGAGATCAACAGGAGTAGTCACCTTGAACCTGATATTGGAAGAGCGTGGTGCTGCACACCAAGGTGATCGGAGGTACGTGCAGGGTTACTAGCGATGCAGCAGGCAATGATTTGTTACTTATATCATTGTACGCAACAAGGTTGTGGGGAGGTTGCGTAAATCGGCGGCGCCCCGCCTTCCTCTACCCGGACATCGATTTTTCCGACCTCCACGAGAACTACTCGAGAACCCGAGCCTGAGTAAACCGGTATACAACTCTAGGCAAGTGCGCTACCCCTTTTACGCGTGAACGGAGCCGCTTTTCCCCCATAGTGCGTAAAGCGGTATGTTTAAATTTACTGTGGCGTTATGCGTCGCAGGTGTATGACCGGCTCGTCAGCGGCCACAGGCATCACGTAATATTTAGCGCTGGTCTTTGTTTTCTGTGATCGAATGGAAGGAGTCATTTATGCCACGAGGATATGACGAATAGTCTATCGTCTGCTAGGCAAGGTAAAAAAGTCAAGAATGAGACGGTGTTTGGCGCTATACCCCACTACAGAAACATATTGCTGCCCCGCGGCTCATGTCGTGCTGGGGTCCCTGTATAACAGCTGACACGACAAGCCGAGGCATCTATGACATCGACTAAAACTCTGGGTCGCGTTATGGTGGACCAGGCACGTACGGGGCGTAGCGCCTATTAAATTAGTCCAAAAGACATTTTTTGGTGACAGTGCTGCCCGACGACGTCCCTAGAATAACCAAAATAGGTCACAAAATATTGTCTTGTTCATGATAATCGATCTTTTTTTGGCAAAGCATCAGAAGTCTACCAGTCAGTTCTTAGCCCAGTGAGAGGGTGATTGGGCGCCAGATCGTAGTCAAATTACGGAGACGATTCTTTGCGTAAAATTGCTCCCGTGAGGGCGAGAATCGGAACAGCGACGATTTATTGCGGCGCGACTCGGGAGATTGACAGGAATACCGAATGGCTAGCTTGTAAATTTAAATAGGAATCCATTGTTCCTAAAGCAGATTAGCGCCGATCCGAGCGTAAACCGGCCGCTGAACGCACGGCGTCATCTGGTTGAACTACTATTGGTAGTAGGAATCACATATGGGTGGTTACTTGTTAGCTTTGTACGCATTGGTTATTCCGCAAAAGGTACAGACTGAACCACTATGTAGCATCCATGTTCTCGATGGCACAAGTTCTCACATGTACGTCATCACGGCACCTGACGCCTAGTTGACCAAAATCTCCGTTGCGGCGACAAACGGCTTCCCTATGAAACGGCATGCAGTCATTTCGGCACACGAGATATTGGGGACAGTGCCTAACTCTCGGTGCCCCTTTTAAAGCAAAATGATGCTTGGTGGCTGGTTACAAAGCCCAGCAGGCATCTCGGATAGTTGTCGCATTTTCTGTCGACAATCGTGACTAGTTGATCTGCACACATAGATGGGCTTACTCCATGCGGCATTTACGCTATCGTATCGGTCATTTACACTACTGCAGGACAGCGAGCGGGGCGTCCATCGAACATGAAGTTCAGGACGGCAACGTGTGGTTAATGTCCTGCGAAGCTTTAACTTAAAGGCGAT'
-    #readProva = 'TCATATCCCTCCCCTAGAGTGCAATAGCTAGAGTGCAATAGC'
+    #readProva = 'TCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCGCGATGCAGTGTCCCTGAATAATCCAAACAACCTCGCCGCGGTCGCATGCGCCGCACGAAAGCCGGAAACTATTCACCTCTGTTTACTGAATGCTATGCGGAGCAGGAACCAGCAATCCTCGATTGTCTCCAGCGTAAAGAAGTGTCGCGCTCTTCCTTGATCACTAACGCGCAGCGGTAGCAAGATCTGCTTTCTACGGTTACGCGAACCAAACAGACTTGGGCGGCCACCTGCAGGTCAAGTACTAATATATAAGCACGGGAATACCACATCATGACGTGAACGATCGCAGCCTTAAAGACAGAATGTATATGCCTAGGCCCGCATATGCCCAACGACTTACAATCGGTGTATCCCTCTAGGTTGAGATCAACAGGAGTAGTCACCTTGAACCTGATATTGGAAGAGCGTGGTGCTGCACACCAAGGTGATCGGAGGTACGTGCAGGGTTACTAGCGATGCAGCAGGCAATGATTTGTTACTTATATCATTGTACGCAACAAGGTTGTGGGGAGGTTGCGTAAATCGGCGGCGCCCCGCCTTCCTCTACCCGGACATCGATTTTTCCGACCTCCACGAGAACTACTCGAGAACCCGAGCCTGAGTAAACCGGTATACAACTCTAGGCAAGTGCGCTACCCCTTTTACGCGTGAACGGAGCCGCTTTTCCCCCATAGTGCGTAAAGCGGTATGTTTAAATTTACTGTGGCGTTATGCGTCGCAGGTGTATGACCGGCTCGTCAGCGGCCACAGGCATCACGTAATATTTAGCGCTGGTCTTTGTTTTCTGTGATCGAATGGAAGGAGTCATTTATGCCACGAGGATATGACGAATAGTCTATCGTCTGCTAGGCAAGGTAAAAAAGTCAAGAATGAGACGGTGTTTGGCGCTATACCCCACTACAGAAACATATTGCTGCCCCGCGGCTCATGTCGTGCTGGGGTCCCTGTATAACAGCTGACACGACAAGCCGAGGCATCTATGACATCGACTAAAACTCTGGGTCGCGTTATGGTGGACCAGGCACGTACGGGGCGTAGCGCCTATTAAATTAGTCCAAAAGACATTTTTTGGTGACAGTGCTGCCCGACGACGTCCCTAGAATAACCAAAATAGGTCACAAAATATTGTCTTGTTCATGATAATCGATCTTTTTTTGGCAAAGCATCAGAAGTCTACCAGTCAGTTCTTAGCCCAGTGAGAGGGTGATTGGGCGCCAGATCGTAGTCAAATTACGGAGACGATTCTTTGCGTAAAATTGCTCCCGTGAGGGCGAGAATCGGAACAGCGACGATTTATTGCGGCGCGACTCGGGAGATTGACAGGAATACCGAATGGCTAGCTTGTAAATTTAAATAGGAATCCATTGTTCCTAAAGCAGATTAGCGCCGATCCGAGCGTAAACCGGCCGCTGAACGCACGGCGTCATCTGGTTGAACTACTATTGGTAGTAGGAATCACATATGGGTGGTTACTTGTTAGCTTTGTACGCATTGGTTATTCCGCAAAAGGTACAGACTGAACCACTATGTAGCATCCATGTTCTCGATGGCACAAGTTCTCACATGTACGTCATCACGGCACCTGACGCCTAGTTGACCAAAATCTCCGTTGCGGCGACAAACGGCTTCCCTATGAAACGGCATGCAGTCATTTCGGCACACGAGATATTGGGGACAGTGCCTAACTCTCGGTGCCCCTTTTAAAGCAAAATGATGCTTGGTGGCTGGTTACAAAGCCCAGCAGGCATCTCGGATAGTTGTCGCATTTTCTGTCGACAATCGTGACTAGTTGATCTGCACACATAGATGGGCTTACTCCATGCGGCATTTACGCTATCGTATCGGTCATTTACACTACTGCAGGACAGCGAGCGGGGCGTCCATCGAACATGAAGTTCAGGACGGCAACGTGTGGTTAATGTCCTGCGAAGCTTTAACTTAAAGGCGAT'
+    readProva = 'TCATATCATATCCCTCCCCTTAGCTCCCTCCCCTTAGC'
     #readProva = 'AACACTGCAACTCTAAAACACTGCAACTAACACTGCAACTCTAAAACACTGCAACTCTAACACTGCACACTGCACTGCAACTCTAACACTGCACACTGCACTATCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCG'
 
     reads_381_20_75 = ['AAAGAAGCCGCAGCAAAAGCGTTTGGCACCGGGATCCGCAATGGTCTGGCGTTTAATCAATTTGAAGTATTCAAT',
@@ -1854,6 +1604,6 @@ if __name__ == "__main__":
     dataset[24] = (genome25, readProva)
 
     genome, reads = dataset[int(sys.argv[2])]
-    for i in range(30):
+    for i in range(1):
         print(f"Esecuzione {i + 1}/20")
         qlearning(reads, int(sys.argv[1]), genome)
