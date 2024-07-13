@@ -16,7 +16,7 @@ import numpy as np
 class GA:
     def __init__(self):
         self.crossover_prob = 0.7
-        self.mutation_prob = 0.2
+        self.mutation_prob = 0.4
         self.ring_size = 3
         # Buffer utilizzato per memorizzare gli overlap calcolati tra le sequenze.
         self.buffer = {}
@@ -44,7 +44,9 @@ class GA:
         # print("Le letture sono: ", reads)
         print(len(population))
         pop_fitness = self._evaluatePopulation(population, gen)
-        print(pop_fitness)
+        #print(pop_fitness)
+        copyFitness = copy.deepcopy(np.array(pop_fitness))
+        print("Fitness Ordinati\n",sorted(copyFitness, reverse=True))
         # print("--------------------------------")
 
         # print("Calcolo della fitness ", pop_fitness, " per la Popolazione corrente: ", population)
@@ -52,12 +54,14 @@ class GA:
         c = np.argmax(pop_fitness)
         # print(c)
         best_ind = copy.deepcopy(population[c])
+        
         # print(best_ind)
         # print("Migliorr individuo della popolazione corrente: \n", best_ind)
         # print("Seleziona l'individuo con la fitness massima dalla popolazione corrente: ", best_ind)
         # print("---------------------")
         # print("Le letture sono: ", reads)
-        best_fit = self._fitness(best_ind)
+        best_fit = float(self._fitness(best_ind))
+        best_ind = (best_fit,best_ind)
         # print("Valore fitness dell'individuo migliore: ", best_fit)
 
         for generation in range(iterazioni):
@@ -93,8 +97,25 @@ class GA:
 
             population = sorted_data
 
-            n = len(population) // 2
-            population = population[:n]
+
+            """
+            
+
+                lenPop = len(population) // 2   
+            population = population[:lenPop]
+            """
+            if len(population) < 50:
+                print("La popolazione è troppo piccola")
+                #return best_ind
+            else:
+                lenPop = len(population) // 2
+                # Calcola il numero di individui da selezionare
+                #lenPop = int(len(population) * 0.6)
+                population = population[:lenPop]
+                print("Popolazione ridotta a: ", len(population))
+
+
+            
 
             print("-----Modifica aver estratto meta popolazione per il crossover")
             for x in population:
@@ -111,7 +132,6 @@ class GA:
                         pop1, pop2 = self._crossover(population[i], population[i + 1])
                         population.append(pop1)
                         population.append(pop2)
-
                 # print("Popolazioni ottenute tramite il crossover: \n", population[i])
                 # print(population[i + 1])
             # Mutation
@@ -120,12 +140,22 @@ class GA:
             for x in population:
                 print("\n", x)
 
+            """
+            Andiamo a effettuare la mutazione solo sui migliori individui della popolazione ad eccezione degli individui generati tramite il crossover
+            """
+            best_ind = population[0]
+            print("Best", best_ind)
 
+            print("-----lenPop", lenPop)
             # print("Siamo nel metodo mutation:")
             for i in range(len(population)):
-                if np.random.rand() > self.mutation_prob:
-                    population[i] = self._mutation(population[i])
-                    # print("Popolazione corrente nel mutation: ", "\n", population[i])
+                n = np.random.rand()
+                print("Probabilita di mutation: ", n)
+                if n < self.mutation_prob:
+                    print("Individuo da mutare: ", population[i]) 
+                    temp = self._mutation(population[i])
+                    print("Individuo mutato: ", temp)
+                    population[i] = temp
 
             # print("Stampa della popolazione dopo l'operazione di mutation:")
 
@@ -138,9 +168,15 @@ class GA:
             #print("Ridefiniamo i valori fitness della popolazione modificata: ")
             # print(array)
             # print("----------------------")
-            print("Best", best_ind)
-            population.append(copy.deepcopy((0.0,best_ind)))
-
+            
+            # Caso in cui anche dopo aver effettuato il crossover e la mutazione il miglior individuo non è presente nella popolazione
+            if best_ind not in population:
+                print("Miglior individuo non presente nella popolazione", best_ind)
+                population.append(copy.deepcopy(best_ind))
+            else:
+                print("Miglior individuo presente nella popolazione", best_ind)
+            
+            
             print("-----Modifica dopo l'aggiunta del miglior individuo")
             for x in population:
                 print("\n", x)
@@ -153,10 +189,12 @@ class GA:
                 print("\n", x)
 
             pop_fitness = self._evaluatePopulation(population, gen)
-            print(pop_fitness)
+            #print(pop_fitness)
+            copyFitness = copy.deepcopy(np.array(pop_fitness))
+            print("Fitness Ordinati\n",sorted(copyFitness, reverse=True))
             value = pop_fitness.max()
-            best_ind = population[pop_fitness.argmax()].copy()
-            print("Miglior individuo:", best_ind)
+            #best_ind = population[pop_fitness.argmax()].copy()
+            #print("Miglior individuo:", best_ind)
             #print("------------------")
             #print("L'obiettivo è quello di mantenere nelle generazioni successive il miglior individuo: ")
             print("Stampa il valore massimo di fitness della generazione attuale: ", value)
@@ -281,58 +319,50 @@ class GA:
         return population1, population2
     """
 
-    import numpy as np
 
-    import numpy as np
+    def _crossover(self, cromossome1, cromossome2):
+        print("-----------------")
+        print("cromossome1", cromossome1)
+        print("cromossome2", cromossome2)
+        # Estrai solo i geni dai cromosomi, ignorando il fitness
+        genes1 = cromossome1[1]
+        print("Geni1", genes1)
+        genes2 = cromossome2[1]
+        print("Geni2", genes2)
 
-    import numpy as np
+        # Scegli casualmente due indici per il crossover
+        indices = sorted(random.sample(range(len(genes1)), 2))
+        print("Indici", indices)
 
-    import numpy as np
+        # Esegui il crossover sui geni
+        aux1 = genes1[indices[0]:indices[1]+1]
+        aux2 = genes2[indices[0]:indices[1]+1]
+        print("aux1", aux1)
+        print("aux2", aux2)
+        print(indices[0], indices[1])
+        # Trova i geni unici dopo il crossover
+        
+        # Trova i geni unici dopo il crossover
+        diff1 = genes1[:indices[0]] + genes1[indices[1]+1:]
+        diff2 = genes2[:indices[0]] + genes2[indices[1]+1:]
+        print("diff1", diff1)
+        print("diff2", diff2)
 
-    import numpy as np
 
-    import numpy as np
+        print("-------")
+        # Crea i figli combinando i segmenti crossover con i geni unici
+        child1_genes = aux1 + diff2
+        child2_genes = aux2 + diff1
 
-    import numpy as np
 
-    import numpy as np
-
-    def _crossover(self, chromosome1, chromosome2):
-        #print("Cromosoma 1 prima del crossover:", chromosome1)
-        #print("Cromosoma 2 prima del crossover:", chromosome2)
-
-        # Estrai le liste di geni dai cromosomi
-        genes1 = chromosome1[1]
-        genes2 = chromosome2[1]
-
-        # Esegui il crossover solo sulla lista di geni
-        genes = np.random.choice(len(genes1), size=2, replace=False)
-        genes.sort()
-
-        #print("Geni selezionati per il crossover:", genes)
-
-        # Copia dei geni originali per costruire i figli
-        child1_genes = genes1[:]
-        child2_genes = genes2[:]
-
-        # Scambio dei geni tra i due cromosomi nei segmenti selezionati
-        for i in range(genes[0], genes[1] + 1):
-            #print(f"Scambio gene {genes1[i][0]} da cromosoma 1 con gene {genes2[i][0]} da cromosoma 2")
-
-            # Scambio delle letture
-            temp_read1 = child1_genes[i][1][:]
-            temp_read2 = child2_genes[i][1][:]
-
-            child1_genes[i] = (genes2[i][0], temp_read2)
-            child2_genes[i] = (genes1[i][0], temp_read1)
-
-        child1 = (0.0, child1_genes)
-        child2 = (0.0, child2_genes)
-
-        #print("Cromosoma 1 dopo il crossover:", child1)
-        #print("Cromosoma 2 dopo il crossover:", child2)
+        # Assegna un valore di fitness pari a 0 ai figli
+        child1 = (0, child1_genes)
+        child2 = (0, child2_genes)
+        print("child1", child1)
+        print("child2", child2)
 
         return child1, child2
+
 
     """
     Questa funzione seleziona casualmente due geni nel cromosoma e ne scambia i valori.
@@ -345,7 +375,7 @@ class GA:
 
         # Seleziona casualmente due indici diversi
         index1, index2 = random.sample(range(len(individuals)), 2)
-        #print("indici", index1,index2)
+        print("indici", index1,index2)
         # Scambia i due individui di posizione
         individuals[index1], individuals[index2] = individuals[index2], individuals[index1]
 
@@ -791,7 +821,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     _cromosomeInt = []
     #print("------------")
     #print(reads)
-    sottosequenza_lunghezza = 7
+    sottosequenza_lunghezza = 20
 
     # Caso in cui abbiamo un dataset diviso in piu letture
     #readsGenoma = ''.join(reads)
@@ -849,8 +879,8 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     #print("------------")
 
     # Popolazione
-    num_ind = 10
-    iterazioni = 15
+    num_ind = 300
+    iterazioni = 200
     ga = GA()
 
     # Creo una lista di indici
@@ -884,9 +914,9 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     #print("--------------------")
     #print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Tre marcatori: ", ind_evolved)
     #print("Popolazione ottenuta tramite l'esecuzione dell'algoritmo genetico su Due marcatori: ", ind_evolved2)
+    print("miglior individuo", ind_evolved[1])
 
-
-    genomePopolation = assemble_genome_with_overlaps(ind_evolved)
+    genomePopolation = assemble_genome_with_overlaps(ind_evolved[1])
     #genomePopolation2 = assemble_genome_with_overlaps(ind_evolved2)
 
     #print("Due genomi da confrontare:\n", "Genoma di partenza:\n", genomePartenza,"\nGenoma  ottenuto dal GA dei 3 marcatori:\n",genomePopolation)
@@ -909,7 +939,7 @@ def qlearning(reads, episodes, genome=None, test_each_episode=False):
     filename = "Test_" + str(marksIndependent) + "Marks_" + str(countRepeat) + "Dim" + ".txt"
     print(filename)
 
-    contenuto = f"NumIndividui: {num_ind}, NumIterazioni: {iterazioni}, Distanza di Levenshtein dati i markers {markers} e di: {levenshtein(genomePartenza, genomePopolation)}\n"
+    contenuto = f"NumIndividui: {num_ind}, NumIterazioni: {iterazioni}, Distanza di Levenshtein dati i markers {markers} e di: {levenshtein(genomePartenza, genomePopolation)}\n\nGenomaPartenza:{genomePartenza}\nGenomaOttenuto:{genomePopolation}\n\n"
 
     with open(filename, 'a') as file:
         file.write(contenuto)
@@ -1192,7 +1222,7 @@ if __name__ == "__main__":
                      'AGCAACAT', 'CCGGACAC', 'ACCATTTT', 'TAAGAGGG', 'GGCCGGAC', 'GCTAAGAG']
     reads_50_30_10 = ['ACATAACAGG', 'CTAACCATTT', 'CAGGCTAAGA', 'AGCAACATAA', 'CTAAGAGGGG', 'AGAGGGGCCG', 'CAGGCTAAGA',
                       'CGGACACCCA', 'AACAGGCTAA', 'CAGCAACATA', 'GGCCGGACAC', 'GGCCGGACAC', 'TAACAGCAAC', 'CCTAACCATT',
-                      'GGGGCCGGAC', 'CAGGCTAAGA', 'GGCTAAGAGG', 'TAAGAGGGGC', 'AACATAACAG', 'CAGCAACATA', 'TAACAGGCTA',
+                      'GGGGCCGGAC', 'CAGCTAAGA', 'GGCTAAGAGG', 'TAAGAGGGGC', 'AACATAACAG', 'CAGCAACATA', 'TAACAGGCTA',
                       'TTTTAACAGC', 'ACCATTTTAA', 'AACATAACAG', 'AGAGGGGCCG', 'GCAACATAAC', 'TAACAGGCTA', 'GGCTAAGAGG',
                       'TAACCATTTT', 'CAGGCTAAGA']
     reads_50_30_15 = ['CTAAGAGGGGCCGGA', 'AACAGCAACATAACA', 'GGGGCCGGACACCCA', 'AGCAACATAACAGGC', 'AACAGGCTAAGAGGG',
@@ -1203,8 +1233,8 @@ if __name__ == "__main__":
                       'TAACCATTTTAACAG', 'AACATAACAGGCTAA', 'CTAAGAGGGGCCGGA', 'AGGCTAAGAGGGGCC', 'CTAAGAGGGGCCGGA']
 
     #readProva = 'TCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCGCGATGCAGTGTCCCTGAATAATCCAAACAACCTCGCCGCGGTCGCATGCGCCGCACGAAAGCCGGAAACTATTCACCTCTGTTTACTGAATGCTATGCGGAGCAGGAACCAGCAATCCTCGATTGTCTCCAGCGTAAAGAAGTGTCGCGCTCTTCCTTGATCACTAACGCGCAGCGGTAGCAAGATCTGCTTTCTACGGTTACGCGAACCAAACAGACTTGGGCGGCCACCTGCAGGTCAAGTACTAATATATAAGCACGGGAATACCACATCATGACGTGAACGATCGCAGCCTTAAAGACAGAATGTATATGCCTAGGCCCGCATATGCCCAACGACTTACAATCGGTGTATCCCTCTAGGTTGAGATCAACAGGAGTAGTCACCTTGAACCTGATATTGGAAGAGCGTGGTGCTGCACACCAAGGTGATCGGAGGTACGTGCAGGGTTACTAGCGATGCAGCAGGCAATGATTTGTTACTTATATCATTGTACGCAACAAGGTTGTGGGGAGGTTGCGTAAATCGGCGGCGCCCCGCCTTCCTCTACCCGGACATCGATTTTTCCGACCTCCACGAGAACTACTCGAGAACCCGAGCCTGAGTAAACCGGTATACAACTCTAGGCAAGTGCGCTACCCCTTTTACGCGTGAACGGAGCCGCTTTTCCCCCATAGTGCGTAAAGCGGTATGTTTAAATTTACTGTGGCGTTATGCGTCGCAGGTGTATGACCGGCTCGTCAGCGGCCACAGGCATCACGTAATATTTAGCGCTGGTCTTTGTTTTCTGTGATCGAATGGAAGGAGTCATTTATGCCACGAGGATATGACGAATAGTCTATCGTCTGCTAGGCAAGGTAAAAAAGTCAAGAATGAGACGGTGTTTGGCGCTATACCCCACTACAGAAACATATTGCTGCCCCGCGGCTCATGTCGTGCTGGGGTCCCTGTATAACAGCTGACACGACAAGCCGAGGCATCTATGACATCGACTAAAACTCTGGGTCGCGTTATGGTGGACCAGGCACGTACGGGGCGTAGCGCCTATTAAATTAGTCCAAAAGACATTTTTTGGTGACAGTGCTGCCCGACGACGTCCCTAGAATAACCAAAATAGGTCACAAAATATTGTCTTGTTCATGATAATCGATCTTTTTTTGGCAAAGCATCAGAAGTCTACCAGTCAGTTCTTAGCCCAGTGAGAGGGTGATTGGGCGCCAGATCGTAGTCAAATTACGGAGACGATTCTTTGCGTAAAATTGCTCCCGTGAGGGCGAGAATCGGAACAGCGACGATTTATTGCGGCGCGACTCGGGAGATTGACAGGAATACCGAATGGCTAGCTTGTAAATTTAAATAGGAATCCATTGTTCCTAAAGCAGATTAGCGCCGATCCGAGCGTAAACCGGCCGCTGAACGCACGGCGTCATCTGGTTGAACTACTATTGGTAGTAGGAATCACATATGGGTGGTTACTTGTTAGCTTTGTACGCATTGGTTATTCCGCAAAAGGTACAGACTGAACCACTATGTAGCATCCATGTTCTCGATGGCACAAGTTCTCACATGTACGTCATCACGGCACCTGACGCCTAGTTGACCAAAATCTCCGTTGCGGCGACAAACGGCTTCCCTATGAAACGGCATGCAGTCATTTCGGCACACGAGATATTGGGGACAGTGCCTAACTCTCGGTGCCCCTTTTAAAGCAAAATGATGCTTGGTGGCTGGTTACAAAGCCCAGCAGGCATCTCGGATAGTTGTCGCATTTTCTGTCGACAATCGTGACTAGTTGATCTGCACACATAGATGGGCTTACTCCATGCGGCATTTACGCTATCGTATCGGTCATTTACACTACTGCAGGACAGCGAGCGGGGCGTCCATCGAACATGAAGTTCAGGACGGCAACGTGTGGTTAATGTCCTGCGAAGCTTTAACTTAAAGGCGAT'
-    readProva = 'TCATATCATATCCCTCCCCTTAGCTCCCTCCCCTTAGC'
-    #readProva = 'AACACTGCAACTCTAAAACACTGCAACTAACACTGCAACTCTAAAACACTGCAACTCTAACACTGCACACTGCACTGCAACTCTAACACTGCACACTGCACTATCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCG'
+    #readProva = 'TCATATCATAACCTTAGCTCCCTCCCCTTAGC'
+    readProva = 'AACACTGCAACTCTAAAACACTGCAACTAACACTGCAACTCTAAAACACTGCAACTCTAACACTGCACACTGCACTGCAACTCTAACACTGCACACTGCACTATCATATCCCTAGAGTGCAATAGCTGAGTGAGTAGCCGTAGGTTCTGCG'
 
     reads_381_20_75 = ['AAAGAAGCCGCAGCAAAAGCGTTTGGCACCGGGATCCGCAATGGTCTGGCGTTTAATCAATTTGAAGTATTCAAT',
                        'GGCGTTGCAAATATGCATGTAACGCTGGCAGATGAGCGGCACTATGCTTGTGCCACGGTAATTATTGAAAGTTAA',
@@ -1603,7 +1633,7 @@ if __name__ == "__main__":
     dataset[23] = (genome4224, reads_4224_230_75)
     dataset[24] = (genome25, readProva)
 
-    genome, reads = dataset[int(sys.argv[2])]
+    genome, reads = dataset[24]
     for i in range(1):
         print(f"Esecuzione {i + 1}/20")
-        qlearning(reads, int(sys.argv[1]), genome)
+        qlearning(reads, 1, genome)

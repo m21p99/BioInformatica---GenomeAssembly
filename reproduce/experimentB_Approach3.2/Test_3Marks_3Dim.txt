@@ -46,3 +46,5 @@ NumIndividui: 10, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['CCC
 NumIndividui: 10, NumIterazioni: 3, Distanza di Levenshtein dati i markers ['CCC', 'CCT', 'TAT'] e di: 24
 NumIndividui: 10, NumIterazioni: 15, Distanza di Levenshtein dati i markers ['CCT', 'TCCC', 'TCATATC'] e di: 20
 NumIndividui: 10, NumIterazioni: 15, Distanza di Levenshtein dati i markers ['CCC', 'CCT', 'TCC'] e di: 22
+NumIndividui: 10, NumIterazioni: 15, Distanza di Levenshtein dati i markers ['CCT', 'TCCC', 'TCATATC'] e di: 23
+NumIndividui: 10, NumIterazioni: 4, Distanza di Levenshtein dati i markers ['TCC', 'CCT', 'CCC'] e di: 17
