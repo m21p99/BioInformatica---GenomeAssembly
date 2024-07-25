@@ -115,6 +115,7 @@ class GA:
             """
 
             if len(population) < 50:
+                lenPop = len(population)
                 print("La popolazione è troppo piccola")
                 #return best_ind
             else:
